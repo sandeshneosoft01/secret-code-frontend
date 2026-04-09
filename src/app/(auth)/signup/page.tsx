@@ -1,13 +1,16 @@
 'use client'
+import { FormEvent, useState } from 'react'
+import Link from 'next/link'
 
 import GoogleAuth from '@/components/GoogleAuth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import Link from 'next/link'
-import React, { FormEvent } from 'react'
+
+import PasswordStrength from '@/components/PasswordStrength'
 
 const Login = () => {
+  const [password, setPassword] = useState('')
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
   }
@@ -22,7 +25,13 @@ const Login = () => {
           </div>
           <div className="space-y-2">
             <Label>Password</Label>
-            <Input placeholder="********" type="password" />
+            <Input
+              placeholder="********"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <PasswordStrength password={password} />
           </div>
         </div>
 
