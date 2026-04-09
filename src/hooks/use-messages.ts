@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useStore } from "@/store";
+import { getMessageByCode } from "@/services/message-service";
 
 export interface Message {
   id: string;
@@ -77,5 +78,11 @@ export const useCreateMessage = () => {
     onError: (error: Error) => {
       toast.error(error.message);
     },
+  });
+};
+
+export const useGetMessageByCode = () => {
+  return useMutation({
+    mutationFn: (code: string) => getMessageByCode(code),
   });
 };

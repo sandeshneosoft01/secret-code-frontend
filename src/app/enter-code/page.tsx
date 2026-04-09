@@ -1,41 +1,53 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import DialogLayout from "@/layouts/DialogLayout";
 import VerifyCode from "@/components/home/VerifyCode";
-import { editorContent } from "@/constant";
+import { useGetMessageByCode } from "@/hooks/use-messages";
 
 const EnterCodePage = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [userCode, setUserCode] = useState("");
-  const [isVerifyCode, setIsVerifyCode] = useState(false);
+  const [messageContent, setMessageContent] = useState("");
+
+  const {
+    mutate: verifyCode,
+    isPending: isVerifying,
+    isSuccess: isVerified,
+  } = useGetMessageByCode();
 
   const handleChangeCode = (value: string) => {
-    if (!isVerifyCode) {
+    if (!isVerified) {
       setUserCode(value);
     }
   };
 
-  const handleVerifyUserCode = async () => {
-    if (!isVerifyCode && userCode.length === 6) {
-      toast.info("Verify process...");
-      setTimeout(() => {
-        toast.info("This message destroyed after 10 minutes", {
-          position: "top-center",
-        });
-      }, 2000);
-      setIsVerifyCode(true);
+  const handleVerifyUserCode = () => {
+    if (!isVerified && userCode.length === 6) {
+      verifyCode(userCode, {
+        onSuccess: (response) => {
+          if (response.success) {
+            setMessageContent(response.data.content);
+            toast.success("Message retrieved successfully!");
+            toast.info("This message will be destroyed soon", {
+              position: "top-center",
+            });
+          }
+        },
+        onError: (error: any) => {
+          const message = error.message;
+          if (message === "MESSAGE_NOT_FOUND") {
+            toast.error("Invalid code. Please check and try again.");
+          } else if (message === "MESSAGE_EXPIRED") {
+            toast.error("This message has expired and is no longer available.");
+          } else {
+            toast.error("An unexpected error occurred. Please try again.");
+          }
+          setUserCode("");
+        },
+      });
     }
   };
-
-  useEffect(() => {
-    // Simulate initial loading
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     if (userCode.length === 6) {
@@ -43,12 +55,13 @@ const EnterCodePage = () => {
     }
   }, [userCode]);
 
+  const isLoading = isVerifying;
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <DialogLayout
-        contentClass={`z-50 ${
-          !isVerifyCode ? "sm:max-w-sm" : "sm:max-w-xl h-[80vh]"
-        }`}
+        contentClass={`z-50 ${!isVerified ? "sm:max-w-sm" : "sm:max-w-xl h-[80vh]"
+          }`}
         dialogOverlayClass="backdrop-blur-xl bg-black/30"
       >
         {isLoading && (
@@ -60,18 +73,18 @@ const EnterCodePage = () => {
           </div>
         )}
 
-        {!isLoading && !isVerifyCode && (
+        {!isLoading && !isVerified && (
           <VerifyCode
             onVerify={handleVerifyUserCode}
             onChangeCode={handleChangeCode}
-            isVerifyCode={isVerifyCode}
+            isVerifyCode={isVerifying}
           />
         )}
 
-        {isVerifyCode && (
+        {isVerified && (
           <div
-            className="h-full overflow-auto pt-4"
-            dangerouslySetInnerHTML={{ __html: editorContent }}
+            className="h-full overflow-auto pt-4 prose prose-slate max-w-none"
+            dangerouslySetInnerHTML={{ __html: messageContent }}
           />
         )}
       </DialogLayout>

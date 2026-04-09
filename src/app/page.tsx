@@ -173,9 +173,6 @@ const Home = () => {
 
   const handleValidateMessage = () => {
     const errors: StateTypes["errors"] = {};
-    if (!state.emailLists.length) {
-      errors.addPeople = "Please add at least one email";
-    }
 
     if (!state.content.length) {
       errors.message = "Please enter a message";
