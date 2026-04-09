@@ -61,7 +61,6 @@ const initialState: StateTypes = {
   customExpiryUnit: "m",
 };
 
-
 const Home = () => {
   const { data: messages = [], isLoading: isMessagesLoading } = useMessages();
   const createMessage = useCreateMessage();
@@ -206,7 +205,9 @@ const Home = () => {
         content: state.content,
         emailLists: state.emailLists,
         code: state.code,
-        accessTime: new Date().toISOString(),
+        expiryTime: state.expiryTime,
+        customExpiryValue: state.customExpiryValue,
+        customExpiryUnit: state.customExpiryUnit,
       },
       {
         onSuccess: () => {
@@ -242,7 +243,7 @@ const Home = () => {
       activeStatus: status,
     }));
   };
-  
+
   const handleExpiryTimeChange = (value: string) => {
     setState((prevState) => ({
       ...prevState,
@@ -293,10 +294,10 @@ const Home = () => {
     <div>
       <DialogLayout
         contentClass={`z-50 ${state.isNewMessage
-            ? "sm:max-w-2xl"
-            : codeParam && !state.isVerifyCode
-              ? "sm:max-w-sm"
-              : "sm:max-w-xl h-[80vh]"
+          ? "sm:max-w-2xl"
+          : codeParam && !state.isVerifyCode
+            ? "sm:max-w-sm"
+            : "sm:max-w-xl h-[80vh]"
           }`}
         dialogOverlayClass="backdrop-blur-xl bg-black/30"
       >
