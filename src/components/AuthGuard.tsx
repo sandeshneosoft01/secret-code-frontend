@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useStore } from '@/store'
 
-const publicRoutes = ['/login', '/signup']
+const publicRoutes = ['/login', '/signup', '/enter-code']
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const user = useStore((state) => state.user)

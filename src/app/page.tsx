@@ -1,6 +1,7 @@
 "use client";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { toast } from "sonner";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -33,8 +34,12 @@ type StateTypes = {
     addPeople?: string;
     message?: string;
     addEmail?: string;
+    expiry?: string;
   };
   activeStatus: "new" | "expiry" | "delete";
+  expiryTime: string;
+  customExpiryValue: string;
+  customExpiryUnit: string;
 };
 
 const initialState: StateTypes = {
@@ -51,6 +56,9 @@ const initialState: StateTypes = {
   isAddCode: false,
   errors: {},
   activeStatus: "new",
+  expiryTime: "10m",
+  customExpiryValue: "10",
+  customExpiryUnit: "m",
 };
 
 
@@ -174,6 +182,12 @@ const Home = () => {
       errors.message = "Please enter a message";
     }
 
+    if (state.expiryTime === "custom") {
+      if (!state.customExpiryValue || parseInt(state.customExpiryValue) <= 0) {
+        errors.expiry = "Please enter a valid amount";
+      }
+    }
+
     return errors;
   };
 
@@ -226,6 +240,29 @@ const Home = () => {
     setState((prevState) => ({
       ...prevState,
       activeStatus: status,
+    }));
+  };
+  
+  const handleExpiryTimeChange = (value: string) => {
+    setState((prevState) => ({
+      ...prevState,
+      expiryTime: value,
+      errors: { ...prevState.errors, expiry: "" },
+    }));
+  };
+
+  const handleCustomExpiryValueChange = (value: string) => {
+    setState((prevState) => ({
+      ...prevState,
+      customExpiryValue: value,
+      errors: { ...prevState.errors, expiry: "" },
+    }));
+  };
+
+  const handleCustomExpiryUnitChange = (value: string) => {
+    setState((prevState) => ({
+      ...prevState,
+      customExpiryUnit: value,
     }));
   };
 
@@ -303,10 +340,25 @@ const Home = () => {
                 onGenerateCode={handleGenerateCode}
                 onSave={handleSaveMessage}
                 onCancel={handleToggleNewMessage}
+                expiryTime={state.expiryTime}
+                onExpiryTimeChange={handleExpiryTimeChange}
+                customExpiryValue={state.customExpiryValue}
+                onCustomExpiryValueChange={handleCustomExpiryValueChange}
+                customExpiryUnit={state.customExpiryUnit}
+                onCustomExpiryUnitChange={handleCustomExpiryUnitChange}
               />
             ) : (
               <>
-                <div className="flex justify-end">
+                <div className="flex justify-end gap-3">
+                  <Link href="/enter-code">
+                    <Button
+                      className="cursor-pointer"
+                      size="sm"
+                      variant="outline"
+                    >
+                      Enter Code
+                    </Button>
+                  </Link>
                   <Button
                     className="cursor-pointer"
                     size="sm"
