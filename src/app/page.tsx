@@ -15,12 +15,7 @@ import MessageList from "@/components/home/MessageList";
 import MessageForm from "@/components/home/MessageForm";
 import AddUserModal from "@/components/home/AddUserModal";
 
-type MessageType = {
-  emailLists: string[];
-  content: string;
-  accessTime: string;
-  code: string;
-};
+import { useMessages, useCreateMessage, Message } from "@/hooks/use-messages";
 
 type StateTypes = {
   isLoading: boolean;
@@ -32,7 +27,6 @@ type StateTypes = {
   emailLists: string[];
   emailSearchVal: string;
   content: string;
-  messageLists: MessageType[];
   code: string;
   isAddCode: boolean;
   errors: {
@@ -53,16 +47,16 @@ const initialState: StateTypes = {
   emailLists: [],
   emailSearchVal: "",
   content: "",
-  messageLists: [],
   code: generateSecretCode(),
   isAddCode: false,
   errors: {},
   activeStatus: "new",
 };
 
-const lists = Array.from({ length: 2 }, (_, i) => i + 1);
 
 const Home = () => {
+  const { data: messages = [], isLoading: isMessagesLoading } = useMessages();
+  const createMessage = useCreateMessage();
   const searchParams = useSearchParams();
   const codeParam = searchParams.get("code");
   const [state, setState] = useState<StateTypes>(initialState);
@@ -192,11 +186,26 @@ const Home = () => {
       }));
       return;
     }
-    toast.success("Message saved");
-    setState((prevState) => ({
-      ...prevState,
-      isNewMessage: false,
-    }));
+
+    createMessage.mutate(
+      {
+        content: state.content,
+        emailLists: state.emailLists,
+        code: state.code,
+        accessTime: new Date().toISOString(),
+      },
+      {
+        onSuccess: () => {
+          setState((prevState) => ({
+            ...prevState,
+            isNewMessage: false,
+            content: "",
+            emailLists: [],
+            code: generateSecretCode(),
+          }));
+        },
+      },
+    );
   };
 
   const handleToggleAddCode = () => {
@@ -286,6 +295,7 @@ const Home = () => {
                 emailCount={state.emailLists.length}
                 secretCode={state.code}
                 isAddCode={state.isAddCode}
+                isSaving={createMessage.isPending}
                 errors={state.errors}
                 onContentChange={handleContentChange}
                 onToggleAddUser={handleToggleAddNewUserModal}
@@ -305,18 +315,14 @@ const Home = () => {
                     Add Message
                   </Button>
                 </div>
-                {lists.length > 0 && (
-                  <MessageList
-                    lists={lists}
-                    activeStatus={state.activeStatus}
-                    onStatusChange={handleChangeActiveStatus}
-                    onEdit={handleToggleNewMessage}
-                    onDelete={handleToggleNewMessage}
-                    content={state.content}
-                    emailCount={state.emailLists.length}
-                    secretCode={state.code}
-                  />
-                )}
+                <MessageList
+                  messages={messages}
+                  isLoading={isMessagesLoading}
+                  activeStatus={state.activeStatus}
+                  onStatusChange={handleChangeActiveStatus}
+                  onEdit={handleToggleNewMessage}
+                  onDelete={handleToggleNewMessage}
+                />
               </>
             )}
           </div>

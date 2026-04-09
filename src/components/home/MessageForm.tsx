@@ -10,6 +10,7 @@ interface MessageFormProps {
   emailCount: number;
   secretCode: string;
   isAddCode: boolean;
+  isSaving?: boolean;
   errors: {
     addPeople?: string;
     message?: string;
@@ -27,6 +28,7 @@ const MessageForm: React.FC<MessageFormProps> = ({
   emailCount,
   secretCode,
   isAddCode,
+  isSaving,
   errors,
   onContentChange,
   onToggleAddUser,
@@ -103,8 +105,12 @@ const MessageForm: React.FC<MessageFormProps> = ({
           <Button variant="outline" className="cursor-pointer" onClick={onCancel}>
             Cancel
           </Button>
-          <Button className="cursor-pointer" onClick={onSave}>
-            Save
+          <Button
+            className="cursor-pointer"
+            onClick={onSave}
+            disabled={isSaving}
+          >
+            {isSaving ? "Saving..." : "Save"}
           </Button>
         </div>
       </div>
