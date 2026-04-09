@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 };
 
 import Providers from "@/components/Providers";
+import AuthGuard from "@/components/AuthGuard";
 
 export default function RootLayout({
   children,
@@ -42,8 +43,10 @@ export default function RootLayout({
         />
         <Providers>
           <StoreProvider>
-            {children}
-            <UserProfile />
+            <AuthGuard>
+              {children}
+              <UserProfile />
+            </AuthGuard>
           </StoreProvider>
         </Providers>
         <Toaster />
