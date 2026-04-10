@@ -8,6 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import DeleteConfirmModal from "./DeleteConfirmModal";
 
 import { Message } from "@/hooks/use-messages";
 
@@ -17,7 +18,8 @@ interface MessageListProps {
   activeStatus: "new" | "expiry" | "delete";
   onStatusChange: (status: "new" | "expiry" | "delete") => void;
   onEdit: (message: Message) => void;
-  onDelete: (messageId: string) => void;
+  onDelete: (messageId: string, onSuccess?: () => void) => void;
+  isDeleting?: boolean;
 }
 
 const MessageList: React.FC<MessageListProps> = ({
@@ -27,7 +29,26 @@ const MessageList: React.FC<MessageListProps> = ({
   onStatusChange,
   onEdit,
   onDelete,
+  isDeleting = false,
 }) => {
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const [messageToDelete, setMessageToDelete] = React.useState<string | null>(
+    null,
+  );
+
+  const handleDeleteClick = (id: string) => {
+    setMessageToDelete(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (messageToDelete) {
+      onDelete(messageToDelete, () => {
+        setIsDeleteDialogOpen(false);
+        setMessageToDelete(null);
+      });
+    }
+  };
   const filteredMessages = messages.filter(
     (message) => message.status === activeStatus,
   );
@@ -145,7 +166,9 @@ const MessageList: React.FC<MessageListProps> = ({
                             variant="outline"
                             size="sm"
                             onClick={() =>
-                              onDelete(message.id || (message._id as string))
+                              handleDeleteClick(
+                                message.id || (message._id as string),
+                              )
                             }
                           >
                             <Trash size={14} />
@@ -163,6 +186,18 @@ const MessageList: React.FC<MessageListProps> = ({
           ))
         )}
       </div>
+      <DeleteConfirmModal
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleConfirmDelete}
+        isDeleting={isDeleting}
+        title={activeStatus === "delete" ? "Permanently Delete Message" : "Delete Message"}
+        description={
+          activeStatus === "delete"
+            ? "Are you sure you want to permanently delete this message? This action is irreversible."
+            : "Are you sure you want to move this message to the trash?"
+        }
+      />
     </div>
   );
 };

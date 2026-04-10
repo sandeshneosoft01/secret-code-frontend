@@ -280,8 +280,12 @@ const Home = () => {
     }));
   };
 
-  const handleDeleteMessage = (id: string) => {
-    deleteMessage.mutate(id);
+  const handleDeleteMessage = (id: string, onSuccess?: () => void) => {
+    deleteMessage.mutate(id, {
+      onSuccess: () => {
+        onSuccess?.();
+      },
+    });
   };
 
   const handleChangeActiveStatus = (status: StateTypes["activeStatus"]) => {
@@ -423,6 +427,7 @@ const Home = () => {
                   onStatusChange={handleChangeActiveStatus}
                   onEdit={handleEditMessage}
                   onDelete={handleDeleteMessage}
+                  isDeleting={deleteMessage.isPending}
                 />
               </>
             )}
