@@ -17,7 +17,7 @@ import MessageList from "@/components/home/MessageList";
 import MessageForm from "@/components/home/MessageForm";
 import AddUserModal from "@/components/home/AddUserModal";
 
-import { useMessages, useCreateMessage, useUpdateMessage, useDeleteMessage, useRestoreMessage, Message } from "@/hooks/use-messages";
+import { useMessages, useCreateMessage, useUpdateMessage, useDeleteMessage, useRestoreMessage, useBulkDeleteMessages, useBulkRestoreMessages, Message } from "@/hooks/use-messages";
 
 type StateTypes = {
   isLoading: boolean;
@@ -70,6 +70,8 @@ const Home = () => {
   const updateMessage = useUpdateMessage();
   const deleteMessage = useDeleteMessage();
   const restoreMessage = useRestoreMessage();
+  const bulkDeleteMessages = useBulkDeleteMessages();
+  const bulkRestoreMessages = useBulkRestoreMessages();
   const user = useStore((state) => state.user);
   const searchParams = useSearchParams();
   const codeParam = searchParams.get("code");
@@ -304,6 +306,18 @@ const Home = () => {
     restoreMessage.mutate(id);
   };
 
+  const handleBulkDeleteMessages = (ids: string[], onSuccess?: () => void) => {
+    bulkDeleteMessages.mutate(ids, {
+      onSuccess: () => {
+        onSuccess?.();
+      },
+    });
+  };
+
+  const handleBulkRestoreMessages = (ids: string[]) => {
+    bulkRestoreMessages.mutate(ids);
+  };
+
   const handleChangeActiveStatus = (status: StateTypes["activeStatus"]) => {
     setState((prevState) => ({
       ...prevState,
@@ -443,9 +457,11 @@ const Home = () => {
                   onStatusChange={handleChangeActiveStatus}
                   onEdit={handleEditMessage}
                   onDelete={handleDeleteMessage}
-                  isDeleting={deleteMessage.isPending}
+                  isDeleting={deleteMessage.isPending || bulkDeleteMessages.isPending}
                   onRestore={handleRestoreMessage}
-                  isRestoring={restoreMessage.isPending}
+                  isRestoring={restoreMessage.isPending || bulkRestoreMessages.isPending}
+                  onBulkDelete={handleBulkDeleteMessages}
+                  onBulkRestore={handleBulkRestoreMessages}
                 />
               </>
             )}

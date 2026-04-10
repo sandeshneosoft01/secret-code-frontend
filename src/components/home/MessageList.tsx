@@ -1,7 +1,8 @@
-"use client";
 import React from "react";
-import { Pencil, RefreshCcw, Trash, Users, ViewIcon } from "lucide-react";
+import { MessageSquareOff, Pencil, RefreshCcw, Trash, Users, ViewIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import {
   Tooltip,
@@ -23,6 +24,8 @@ interface MessageListProps {
   isDeleting?: boolean;
   onRestore: (messageId: string) => void;
   isRestoring?: boolean;
+  onBulkDelete: (messageIds: string[], onSuccess?: () => void) => void;
+  onBulkRestore: (messageIds: string[]) => void;
 }
 
 const MessageList: React.FC<MessageListProps> = ({
@@ -35,23 +38,70 @@ const MessageList: React.FC<MessageListProps> = ({
   isDeleting = false,
   onRestore,
   isRestoring = false,
+  onBulkDelete,
+  onBulkRestore,
 }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
-  const [messageToDelete, setMessageToDelete] = React.useState<string | null>(
+  const [messageToDelete, setMessageToDelete] = React.useState<string | string[] | null>(
     null,
   );
+  const [selectedIds, setSelectedIds] = React.useState<Set<string>>(new Set());
 
-  const handleDeleteClick = (id: string) => {
+  const filteredMessages = messages.filter(
+    (message) => message.status === activeStatus,
+  );
+
+  const handleToggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
+
+  const handleToggleSelectAll = () => {
+    if (selectedCount === filteredMessages.length && filteredMessages.length > 0) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(filteredMessages.map((m) => (m.id || m._id as string))));
+    }
+  };
+
+  const handleDeleteClick = (id: string | string[]) => {
     setMessageToDelete(id);
     setIsDeleteDialogOpen(true);
   };
 
   const handleConfirmDelete = () => {
     if (messageToDelete) {
-      onDelete(messageToDelete, () => {
-        setIsDeleteDialogOpen(false);
-        setMessageToDelete(null);
-      });
+      if (Array.isArray(messageToDelete)) {
+        onBulkDelete(messageToDelete, () => {
+          setIsDeleteDialogOpen(false);
+          setMessageToDelete(null);
+          setSelectedIds(new Set());
+        });
+      } else {
+        onDelete(messageToDelete, () => {
+          setIsDeleteDialogOpen(false);
+          setMessageToDelete(null);
+          setSelectedIds((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(messageToDelete as string);
+            return newSet;
+          });
+        });
+      }
+    }
+  };
+
+  const handleBulkRestore = () => {
+    if (selectedIds.size > 0) {
+      onBulkRestore(Array.from(selectedIds));
+      setSelectedIds(new Set());
     }
   };
 
@@ -60,37 +110,88 @@ const MessageList: React.FC<MessageListProps> = ({
     toast.success("Code copied to clipboard");
   };
 
-  const filteredMessages = messages.filter(
-    (message) => message.status === activeStatus,
-  );
+  const selectedCount = React.useMemo(() => {
+    const visibleIds = new Set(filteredMessages.map((m) => m.id || (m._id as string)));
+    return Array.from(selectedIds).filter((id) => visibleIds.has(id)).length;
+  }, [selectedIds, filteredMessages]);
+
+  // Reset selection when tab changes
+  React.useEffect(() => {
+    setSelectedIds(new Set());
+  }, [activeStatus]);
 
   return (
     <div className="mt-4">
-      <div className="flex justify-end space-x-2">
-        <Button
-          size="sm"
-          variant={activeStatus === "new" ? "default" : "outline"}
-          className="text-xs p-0 h-6 px-2 cursor-pointer"
-          onClick={() => onStatusChange("new")}
-        >
-          New
-        </Button>
-        <Button
-          size="sm"
-          variant={activeStatus === "expiry" ? "default" : "outline"}
-          className="text-xs p-0 h-6 px-2 cursor-pointer"
-          onClick={() => onStatusChange("expiry")}
-        >
-          Expiry
-        </Button>
-        <Button
-          size="sm"
-          variant={activeStatus === "delete" ? "default" : "outline"}
-          className="text-xs p-0 h-6 px-2 cursor-pointer"
-          onClick={() => onStatusChange("delete")}
-        >
-          Delete
-        </Button>
+      <div className="flex items-center justify-between pb-2 border-b mb-2">
+        <div className="flex items-center space-x-2">
+          {filteredMessages.length > 0 && (
+            <div className="flex items-center space-x-2 mr-4">
+              <Checkbox
+                id="select-all"
+                checked={selectedCount === filteredMessages.length && filteredMessages.length > 0}
+                onCheckedChange={handleToggleSelectAll}
+              />
+              <label
+                htmlFor="select-all"
+                className="text-xs text-gray-500 font-medium cursor-pointer"
+              >
+                {selectedCount > 0 ? `${selectedCount} selected` : "Select All"}
+              </label>
+            </div>
+          )}
+          {selectedCount > 0 && (
+            <div className="flex items-center space-x-2 animate-in fade-in slide-in-from-left-2">
+              {activeStatus === "delete" && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="text-xs h-7 px-2 cursor-pointer border-green-200 bg-green-50 hover:bg-green-100 text-green-700"
+                  onClick={handleBulkRestore}
+                  disabled={isRestoring}
+                >
+                  <RefreshCcw size={12} className={`mr-1 ${isRestoring ? "animate-spin" : ""}`} />
+                  Restore
+                </Button>
+              )}
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-xs h-7 px-2 cursor-pointer border-red-200 bg-red-50 hover:bg-red-100 text-red-700"
+                onClick={() => handleDeleteClick(Array.from(selectedIds))}
+                disabled={isDeleting}
+              >
+                <Trash size={12} className="mr-1" />
+                Delete
+              </Button>
+            </div>
+          )}
+        </div>
+        <div className="flex space-x-2">
+          <Button
+            size="sm"
+            variant={activeStatus === "new" ? "default" : "outline"}
+            className="text-xs h-7 px-3 cursor-pointer"
+            onClick={() => onStatusChange("new")}
+          >
+            New
+          </Button>
+          <Button
+            size="sm"
+            variant={activeStatus === "expiry" ? "default" : "outline"}
+            className="text-xs h-7 px-3 cursor-pointer"
+            onClick={() => onStatusChange("expiry")}
+          >
+            Expiry
+          </Button>
+          <Button
+            size="sm"
+            variant={activeStatus === "delete" ? "default" : "outline"}
+            className="text-xs h-7 px-3 cursor-pointer"
+            onClick={() => onStatusChange("delete")}
+          >
+            Trash
+          </Button>
+        </div>
       </div>
       <div className="relative overflow-auto h-80 space-y-2 mt-4">
         {isLoading ? (
@@ -98,127 +199,129 @@ const MessageList: React.FC<MessageListProps> = ({
             <span className="text-sm text-gray-500">Loading messages...</span>
           </div>
         ) : filteredMessages.length === 0 ? (
-          <div className="flex items-center justify-center h-full">
-            <span className="text-sm text-gray-500">No messages found.</span>
+          <div className="flex flex-col items-center justify-center h-full space-y-3 animate-in fade-in zoom-in duration-300">
+            <div className="p-4 bg-gray-50 rounded-full">
+              <MessageSquareOff size={32} className="text-gray-300" />
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-medium text-gray-900">No messages found</p>
+              <p className="text-xs text-gray-500">Items you create will appear here.</p>
+            </div>
           </div>
         ) : (
-          filteredMessages.map((message, index) => (
-            <div
-              key={message.id || message._id}
-              className="flex w-full gap-2 border rounded-md p-2 text-sm"
-            >
-              <div className="">{index + 1}.</div>
-              <div className="w-full">
-                <div>
-                  <span className="font-medium">Message</span>
-                  <div
-                    className="h-full w-full line-clamp-2 text-gray-600"
-                    dangerouslySetInnerHTML={{
-                      __html: message.content,
-                    }}
+          filteredMessages.map((message, index) => {
+            const messageId = (message.id || message._id as string);
+            const isSelected = selectedIds.has(messageId);
+            return (
+              <div
+                key={messageId}
+                className={`flex w-full gap-2 border rounded-md p-3 text-sm transition-all duration-200 ${isSelected ? "bg-blue-50/50 border-blue-200 shadow-sm" : "hover:border-gray-300"}`}
+              >
+                <div className="flex items-start pt-1">
+                  <Checkbox
+                    checked={isSelected}
+                    onCheckedChange={() => handleToggleSelect(messageId)}
                   />
                 </div>
-                <div className="mt-2 flex items-end justify-between w-full">
-                  <div className="flex items-center space-x-3">
-                    <div className="flex flex-col w-fit">
-                      <span className="font-medium text-gray-600">People</span>
-                      <Button
-                        className="flex items-center text-sm h-8 px-1 cursor-pointer"
-                        variant="outline"
-                        size="sm"
-                      >
-                        <Users size={14} />
-                        <span>{message.emailLists.length}</span>
-                      </Button>
-                    </div>
-                      <div className="flex flex-col w-fit">
-                        <span className="font-medium text-gray-600">Code</span>
-                        <Button
-                          className="px-2 text-sm cursor-pointer"
+                <div className="pt-0.5 text-gray-400 font-medium">{index + 1}.</div>
+                <div className="w-full">
+                  <div>
+                    <span className="font-semibold text-gray-700">Message</span>
+                    <div
+                      className="mt-1 w-full line-clamp-2 text-gray-600 leading-relaxed"
+                      dangerouslySetInnerHTML={{
+                        __html: message.content,
+                      }}
+                    />
+                  </div>
+                  <div className="mt-4 flex items-end justify-between w-full">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">People</span>
+                        <Badge variant="outline" className="h-7 px-2 font-medium bg-gray-50/50">
+                          <Users size={12} className="mr-1 text-gray-500" />
+                          {message.emailLists.length}
+                        </Badge>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Code</span>
+                        <Badge
                           variant="outline"
-                          size="sm"
+                          className="h-7 px-2 font-mono cursor-pointer hover:bg-gray-100 transition-colors bg-gray-50/50"
                           onClick={() => handleCopyCode(message.code)}
                         >
                           {message.code}
-                        </Button>
+                        </Badge>
                       </div>
-                    <div className="flex flex-col w-fit">
-                      <span className="font-medium text-gray-600">View</span>
-                      <Button
-                        className="px-2 text-sm cursor-pointer"
-                        variant="outline"
-                        size="sm"
-                      >
-                        <ViewIcon size={14} />
-                        <span>{message.viewCount}</span>
-                      </Button>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Views</span>
+                        <Badge variant="outline" className="h-7 px-2 font-medium bg-gray-50/50">
+                          <ViewIcon size={12} className="mr-1 text-gray-500" />
+                          {message.viewCount}
+                        </Badge>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            className="cursor-pointer"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => onEdit(message)}
-                          >
-                            <Pencil size={14} />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Edit</p>
-                        </TooltipContent>
-                      </Tooltip>
-                      {activeStatus === "delete" && (
+                    <div className="flex items-center space-x-2">
+                      <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Button
-                              className="cursor-pointer"
+                              className="w-8 h-8 p-0 cursor-pointer"
                               variant="outline"
-                              size="sm"
-                              onClick={() =>
-                                onRestore(message.id || (message._id as string))
-                              }
-                              disabled={isRestoring}
+                              onClick={() => onEdit(message)}
                             >
-                              <RefreshCcw
-                                size={14}
-                                className={isRestoring ? "animate-spin" : ""}
-                              />
+                              <Pencil size={14} />
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>Restore</p>
+                            <p>Edit Message</p>
                           </TooltipContent>
                         </Tooltip>
-                      )}
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            className="cursor-pointer"
-                            variant="outline"
-                            size="sm"
-                            onClick={() =>
-                              handleDeleteClick(
-                                message.id || (message._id as string),
-                              )
-                            }
-                          >
-                            <Trash size={14} />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Delete</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                        {activeStatus === "delete" && (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                className="w-8 h-8 p-0 cursor-pointer border-green-100 hover:bg-green-50 hover:text-green-600"
+                                variant="outline"
+                                onClick={() =>
+                                  onRestore(messageId)
+                                }
+                                disabled={isRestoring}
+                              >
+                                <RefreshCcw
+                                  size={14}
+                                  className={isRestoring ? "animate-spin" : ""}
+                                />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Restore Message</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              className={`w-8 h-8 p-0 cursor-pointer border-red-100 hover:bg-red-50 hover:text-red-600 ${activeStatus === 'delete' ? 'text-red-600 bg-red-50' : ''}`}
+                              variant="outline"
+                              onClick={() =>
+                                handleDeleteClick(messageId)
+                              }
+                            >
+                              <Trash size={14} />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{activeStatus === 'delete' ? 'Permanently Delete' : 'Move to Trash'}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
       <DeleteConfirmModal
@@ -226,11 +329,19 @@ const MessageList: React.FC<MessageListProps> = ({
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={handleConfirmDelete}
         isDeleting={isDeleting}
-        title={activeStatus === "delete" ? "Permanently Delete Message" : "Delete Message"}
+        title={
+          Array.isArray(messageToDelete)
+            ? (activeStatus === "delete" ? "Permanently Delete Selected" : "Move Selected to Trash")
+            : (activeStatus === "delete" ? "Permanently Delete Message" : "Move to Trash")
+        }
         description={
-          activeStatus === "delete"
-            ? "Are you sure you want to permanently delete this message? This action is irreversible."
-            : "Are you sure you want to move this message to the trash?"
+          Array.isArray(messageToDelete)
+            ? (activeStatus === "delete"
+              ? `Are you sure you want to permanently delete these ${messageToDelete.length} messages? This action cannot be undone.`
+              : `Are you sure you want to move these ${messageToDelete.length} messages to the trash?`)
+            : (activeStatus === "delete"
+              ? "Are you sure you want to permanently delete this message? This action cannot be undone."
+              : "Are you sure you want to move this message to the trash?")
         }
       />
     </div>

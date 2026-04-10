@@ -194,3 +194,71 @@ export const useRestoreMessage = () => {
     },
   });
 };
+
+export const useBulkDeleteMessages = () => {
+  const queryClient = useQueryClient();
+  const user = useStore((state) => state.user);
+
+  return useMutation({
+    mutationFn: async (ids: string[]) => {
+      if (!user?.token) throw new Error("User not authenticated");
+
+      const response = await fetch(`${API_BASE_URL}/api/v1/messages/bulk-delete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ ids }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to delete messages");
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["messages"] });
+      toast.success("Messages deleted successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+export const useBulkRestoreMessages = () => {
+  const queryClient = useQueryClient();
+  const user = useStore((state) => state.user);
+
+  return useMutation({
+    mutationFn: async (ids: string[]) => {
+      if (!user?.token) throw new Error("User not authenticated");
+
+      const response = await fetch(`${API_BASE_URL}/api/v1/messages/bulk-restore`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ ids }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to restore messages");
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["messages"] });
+      toast.success("Messages restored successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+};
