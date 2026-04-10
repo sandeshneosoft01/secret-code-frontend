@@ -41,15 +41,9 @@ export const signInUser = async (data: SignInUserPayload) => {
     }
 }
 
-export const signUpWithGoogle = async ({
-    idToken,
-    role,
-}: {
-    idToken: string
-    role: string
-}) => {
+export const signUpWithGoogle = async (idToken: string) => {
     try {
-        const response = await api.post('/api/v1/signup/google', { idToken, role })
+        const response = await api.post('/api/v1/signup/google', { idToken })
         return response.data
     } catch (error: any) {
         toast.error(error.response.data.error)
@@ -62,6 +56,7 @@ export const signInWithGoogle = async (idToken: string) => {
         const response = await api.post('/api/v1/signin/google', { idToken })
         return response.data
     } catch (error: any) {
+        console.log("xoxo", error.response.data.error)
         toast.error(error.response.data.error)
         throw new Error(error.response.data.error)
     }

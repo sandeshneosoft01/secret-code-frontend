@@ -3,67 +3,67 @@
 import GoogleAuth from '@/components/GoogleAuth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import Link from 'next/link'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useSignin } from '@/hooks/use-auth'
 import { loginSchema, LoginValues } from '@/lib/validations'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 
 const Login = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginValues>({
+  const { mutate: signin, isPending } = useSignin()
+  const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   })
 
-  const onSubmit = async (data: LoginValues) => {
-    console.log('Login data:', data)
+  const onSubmit = (data: LoginValues) => {
+    signin(data)
   }
 
   return (
     <div>
-      <GoogleAuth title="Sign in with Google" />
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              placeholder="Enter your email"
-              type="email"
-              {...register('email')}
-              aria-invalid={errors.email ? 'true' : 'false'}
+      <GoogleAuth title="Sign in with Google" loginType="signin" />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-5">
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your email" type="email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.email && (
-              <p className="text-[13px] text-rose-500 animate-in fade-in slide-in-from-top-1 duration-300">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              placeholder="********"
-              type="password"
-              {...register('password')}
-              aria-invalid={errors.password ? 'true' : 'false'}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input placeholder="********" type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.password && (
-              <p className="text-[13px] text-rose-500 animate-in fade-in slide-in-from-top-1 duration-300">
-                {errors.password.message}
-              </p>
-            )}
           </div>
-        </div>
 
-        <Button className="w-full mt-8 cursor-pointer" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Signing in...' : 'Sign in'}
-        </Button>
-      </form>
+          <Button className="w-full mt-8 cursor-pointer" type="submit" disabled={isPending}>
+            {isPending ? 'Signing in...' : 'Sign in'}
+          </Button>
+        </form>
+      </Form>
       <div className="text-center mt-4">
         <p className="text-sm text-gray-600">
           Don&apos;t have an account?&nbsp;

@@ -17,7 +17,11 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     if (!user && !isPublicRoute) {
       router.replace('/login')
     } else if (user && isPublicRoute) {
-      router.replace('/')
+      if (pathname === '/enter-code') {
+        router.replace(pathname)
+      } else {
+        router.replace('/')
+      }
     }
   }, [user, pathname, router])
 

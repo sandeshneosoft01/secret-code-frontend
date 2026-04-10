@@ -10,24 +10,35 @@ import {
   auth as googleAuthConfig,
   googleProvider,
 } from '@/lib/firebase'
-import { signInUser, signInWithGoogle } from '@/services/user-service'
+import { signInWithGoogle, signUpWithGoogle } from '@/services/user-service'
+import { useStore } from '@/store'
+import { useRouter } from 'next/navigation'
 
 type PropTypes = {
-  title: string
+  title: string,
+  loginType: 'signin' | 'signup'
 }
 
 const GoogleAuth = (props: PropTypes) => {
-  const { title } = props
-  const mutationGoogle = useMutation({
-    mutationFn: signInWithGoogle,
-    // onSuccess: (data) => handleSuccessGoogle(data),
-    onError: () => { },
-  })
+  const { title, loginType } = props
+  const navigate = useRouter()
   const mutation = useMutation({
-    mutationFn: signInUser,
-    // onSuccess: (data) => handleSuccess(data),
+    mutationFn: loginType === 'signin' ? signInWithGoogle : signUpWithGoogle,
+    onSuccess: (data) => handleSuccess(data),
     onError: () => { },
   })
+  const setUser = useStore((s) => s.setUser);
+
+  const handleSuccess = (user: any) => {
+    const userDetails = {
+      token: user.token,
+      user: user.user,
+    }
+
+    setUser(userDetails)
+    toast.success(`${loginType === 'signin' ? 'Signed in' : 'Signed up'} successfully!`)
+    navigate.push('/')
+  }
 
   const handleSignInGoogle = async (e: React.MouseEvent) => {
     const button = e.target as HTMLButtonElement
@@ -35,7 +46,7 @@ const GoogleAuth = (props: PropTypes) => {
     try {
       const result = await signInWithPopup(googleAuthConfig, googleProvider)
       const idToken = await result.user.getIdToken(true)
-      await mutationGoogle.mutate(idToken)
+      await mutation.mutate(idToken)
     } catch (error: any) {
       toast.error(error?.data?.message || 'Failed to sign in with Google.')
     }
@@ -45,7 +56,7 @@ const GoogleAuth = (props: PropTypes) => {
     <Button
       className="cursor-pointer w-full"
       variant="outline"
-      disabled={mutation.isPending || mutationGoogle.isPending}
+      disabled={mutation.isPending}
       onClick={handleSignInGoogle}
     >
       <Image
