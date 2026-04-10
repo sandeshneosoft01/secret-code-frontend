@@ -17,7 +17,7 @@ interface MessageListProps {
   activeStatus: "new" | "expiry" | "delete";
   onStatusChange: (status: "new" | "expiry" | "delete") => void;
   onEdit: (message: Message) => void;
-  onDelete: () => void;
+  onDelete: (messageId: string) => void;
 }
 
 const MessageList: React.FC<MessageListProps> = ({
@@ -28,6 +28,10 @@ const MessageList: React.FC<MessageListProps> = ({
   onEdit,
   onDelete,
 }) => {
+  const filteredMessages = messages.filter(
+    (message) => message.status === activeStatus,
+  );
+
   return (
     <div className="mt-4">
       <div className="flex justify-end space-x-2">
@@ -61,14 +65,14 @@ const MessageList: React.FC<MessageListProps> = ({
           <div className="flex items-center justify-center h-full">
             <span className="text-sm text-gray-500">Loading messages...</span>
           </div>
-        ) : messages.length === 0 ? (
+        ) : filteredMessages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <span className="text-sm text-gray-500">No messages found.</span>
           </div>
         ) : (
-          messages.map((message, index) => (
+          filteredMessages.map((message, index) => (
             <div
-              key={message.id}
+              key={message.id || message._id}
               className="flex w-full gap-2 border rounded-md p-2 text-sm"
             >
               <div className="">{index + 1}.</div>
@@ -140,7 +144,9 @@ const MessageList: React.FC<MessageListProps> = ({
                             className="cursor-pointer"
                             variant="outline"
                             size="sm"
-                            onClick={onDelete}
+                            onClick={() =>
+                              onDelete(message.id || (message._id as string))
+                            }
                           >
                             <Trash size={14} />
                           </Button>

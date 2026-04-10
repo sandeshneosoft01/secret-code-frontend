@@ -16,7 +16,7 @@ import MessageList from "@/components/home/MessageList";
 import MessageForm from "@/components/home/MessageForm";
 import AddUserModal from "@/components/home/AddUserModal";
 
-import { useMessages, useCreateMessage, useUpdateMessage, Message } from "@/hooks/use-messages";
+import { useMessages, useCreateMessage, useUpdateMessage, useDeleteMessage, Message } from "@/hooks/use-messages";
 
 type StateTypes = {
   isLoading: boolean;
@@ -67,6 +67,7 @@ const Home = () => {
   const { data: messages = [], isLoading: isMessagesLoading } = useMessages();
   const createMessage = useCreateMessage();
   const updateMessage = useUpdateMessage();
+  const deleteMessage = useDeleteMessage();
   const searchParams = useSearchParams();
   const codeParam = searchParams.get("code");
   const [state, setState] = useState<StateTypes>(initialState);
@@ -279,6 +280,10 @@ const Home = () => {
     }));
   };
 
+  const handleDeleteMessage = (id: string) => {
+    deleteMessage.mutate(id);
+  };
+
   const handleChangeActiveStatus = (status: StateTypes["activeStatus"]) => {
     setState((prevState) => ({
       ...prevState,
@@ -417,7 +422,7 @@ const Home = () => {
                   activeStatus={state.activeStatus}
                   onStatusChange={handleChangeActiveStatus}
                   onEdit={handleEditMessage}
-                  onDelete={handleToggleNewMessage}
+                  onDelete={handleDeleteMessage}
                 />
               </>
             )}

@@ -129,3 +129,35 @@ export const useGetMessageByCode = () => {
     mutationFn: (code: string) => getMessageByCode(code),
   });
 };
+
+export const useDeleteMessage = () => {
+  const queryClient = useQueryClient();
+  const user = useStore((state) => state.user);
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      if (!user?.token) throw new Error("User not authenticated");
+
+      const response = await fetch(`${API_BASE_URL}/api/v1/messages/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || errorData.message || "Failed to delete message");
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["messages"] });
+      toast.success("Message deleted successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+};
