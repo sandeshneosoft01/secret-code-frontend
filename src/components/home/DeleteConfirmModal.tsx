@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import DialogLayout from "@/layouts/DialogLayout";
+import { useTranslations } from "next-intl";
 
 interface DeleteConfirmModalProps {
   isOpen: boolean;
@@ -17,15 +18,17 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
   onClose,
   onConfirm,
   isDeleting = false,
-  title = "Delete Message",
-  description = "Are you sure you want to delete this message? This action cannot be undone.",
+  title,
+  description,
 }) => {
+  const t = useTranslations("HomePage");
+  
   return (
     <DialogLayout
       open={isOpen}
       handleOpenChange={onClose}
-      title={title}
-      description={description}
+      title={title || t("MessageList.modal.permDeleteMessage")}
+      description={description || t("MessageList.modal.permDeleteConfirm")}
       contentClass="max-w-md w-full"
       dialogOverlayClass="backdrop-blur-[2px] bg-black/30"
     >
@@ -36,7 +39,7 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
           onClick={onClose}
           disabled={isDeleting}
         >
-          Cancel
+          {t("cancel")}
         </Button>
         <Button
           variant="destructive"
@@ -44,7 +47,7 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
           onClick={onConfirm}
           disabled={isDeleting}
         >
-          {isDeleting ? "Deleting..." : "Delete"}
+          {isDeleting ? t("deleting") : t("delete")}
         </Button>
       </div>
     </DialogLayout>

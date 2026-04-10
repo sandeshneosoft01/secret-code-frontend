@@ -12,7 +12,8 @@ import {
 } from '@/lib/firebase'
 import { signInWithGoogle, signUpWithGoogle } from '@/services/user-service'
 import { useStore } from '@/store'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 
 type PropTypes = {
   title: string,
@@ -23,6 +24,8 @@ const GoogleAuth = (props: PropTypes) => {
   const { title, loginType } = props
   const navigate = useRouter()
   const isMutating = useIsMutating()
+  const t = useTranslations('Auth')
+
   const mutation = useMutation({
     mutationFn: loginType === 'signin' ? signInWithGoogle : signUpWithGoogle,
     onSuccess: (data) => handleSuccess(data),
@@ -37,7 +40,7 @@ const GoogleAuth = (props: PropTypes) => {
     }
 
     setUser(userDetails)
-    toast.success(`${loginType === 'signin' ? 'Signed in' : 'Signed up'} successfully!`)
+    toast.success(loginType === 'signin' ? t('signinSuccess') : t('signupSuccess'))
     navigate.push('/')
   }
 
@@ -49,7 +52,7 @@ const GoogleAuth = (props: PropTypes) => {
       const idToken = await result.user.getIdToken(true)
       await mutation.mutate(idToken)
     } catch (error: any) {
-      toast.error(error?.data?.message || 'Failed to sign in with Google.')
+      toast.error(error?.data?.message || t('googleAuthError'))
     }
     button.disabled = false
   }

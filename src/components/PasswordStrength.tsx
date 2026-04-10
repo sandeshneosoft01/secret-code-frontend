@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import { Check, X, Shield, ShieldCheck, ShieldAlert } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
 
 interface Requirement {
   id: string
@@ -15,32 +16,33 @@ interface PasswordStrengthProps {
 }
 
 const PasswordStrength = ({ password = '' }: PasswordStrengthProps) => {
+  const t = useTranslations('Auth.PasswordStrength')
   const requirements: Requirement[] = useMemo(() => {
     return [
-      { id: 'length', label: 'At least 8 characters', met: password.length >= 8 },
-      { id: 'uppercase', label: 'Contains uppercase letters', met: /[A-Z]/.test(password) },
-      { id: 'lowercase', label: 'Contains lowercase letters', met: /[a-z]/.test(password) },
-      { id: 'number', label: 'Contains numbers', met: /[0-9]/.test(password) },
-      { id: 'special', label: 'Contains special characters', met: /[^A-Za-z0-9]/.test(password) },
+      { id: 'length', label: t('length'), met: password.length >= 8 },
+      { id: 'uppercase', label: t('uppercase'), met: /[A-Z]/.test(password) },
+      { id: 'lowercase', label: t('lowercase'), met: /[a-z]/.test(password) },
+      { id: 'number', label: t('number'), met: /[0-9]/.test(password) },
+      { id: 'special', label: t('special'), met: /[^A-Za-z0-9]/.test(password) },
     ]
-  }, [password])
+  }, [password, t])
 
   const strengthScore = requirements.filter((r) => r.met).length
 
   const getStrengthLabel = () => {
-    if (password.length === 0) return 'Enter a password'
+    if (password.length === 0) return t('enterPassword')
     switch (strengthScore) {
       case 0:
       case 1:
-        return 'Very Weak'
+        return t('veryWeak')
       case 2:
-        return 'Weak'
+        return t('weak')
       case 3:
-        return 'Fair'
+        return t('fair')
       case 4:
-        return 'Strong'
+        return t('strong')
       case 5:
-        return 'Very Strong'
+        return t('veryStrong')
       default:
         return ''
     }
@@ -84,7 +86,7 @@ const PasswordStrength = ({ password = '' }: PasswordStrengthProps) => {
               {getStrengthLabel()}
             </span>
           </div>
-          <span className="text-muted-foreground">{strengthScore}/5 requirements met</span>
+          <span className="text-muted-foreground">{t('reqMet', { count: strengthScore })}</span>
         </div>
 
         <div className="grid grid-cols-5 gap-1.5">

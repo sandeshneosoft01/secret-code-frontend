@@ -18,11 +18,11 @@ export const useSignin = () => {
         token: response.token,
         user: response.user,
       })
-      toast.success(t(response.code || 'SIGNIN_SUCCESSFUL'))
+      toast.success(t(response.code || response.message || 'SIGNIN_SUCCESSFUL'))
       router.push('/')
     },
     onError: (error: any) => {
-      const code = error.response?.data?.code || 'INTERNAL_ERROR'
+      const code = error.response?.data?.code || error.response?.data?.error || error.response?.data?.message || 'INTERNAL_ERROR'
       toast.error(t(code as any))
     },
   })
@@ -40,11 +40,11 @@ export const useSignup = () => {
         token: response.token,
         user: response.user,
       })
-      toast.success(t(response.code || 'SIGNUP_SUCCESSFUL'))
+      toast.success(t(response.code || response.message || 'SIGNUP_SUCCESSFUL'))
       router.push('/')
     },
     onError: (error: any) => {
-      const code = error.response?.data?.code || 'INTERNAL_ERROR'
+      const code = error.response?.data?.code || error.response?.data?.error || error.response?.data?.message || 'INTERNAL_ERROR'
       toast.error(t(code as any))
     },
   })

@@ -32,7 +32,7 @@ const Login = () => {
 
   return (
     <div>
-      <GoogleAuth title={`${t('signin')} with Google`} loginType="signin" />
+      <GoogleAuth title={`${t('signin')} ${t('withGoogle')}`} loginType="signin" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="mt-5">
           <div className="space-y-4">
@@ -43,7 +43,7 @@ const Login = () => {
                 <FormItem>
                   <FormLabel>{t('email')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your email" type="email" {...field} />
+                    <Input placeholder={t('enterEmail')} type="email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

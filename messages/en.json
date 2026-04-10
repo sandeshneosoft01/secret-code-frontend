@@ -6,11 +6,13 @@
     "enterCode": "Enter Code",
     "verifyProcess": "Verify process...",
     "destroyedAfter": "This message destroyed after 10 minutes",
-    "enterYourMessage": "Enter your message",
+    "enterYourMessage": "Write something amazing...",
     "save": "Save",
     "cancel": "Cancel",
     "update": "Update",
     "saving": "Saving...",
+    "deleting": "Deleting...",
+    "delete": "Delete",
     "addPeople": "Add People",
     "generate": "Generate",
     "addCode": "Add Code",
@@ -66,6 +68,21 @@
       "enterComplete": "Please enter a complete 6-digit code.",
       "enterToVerify": "Please enter your secret code to verify.",
       "verify": "Verify"
+    },
+    "AddUserModal": {
+      "title": "Add User",
+      "enterEmail": "Enter user email",
+      "add": "Add",
+      "search": "Search",
+      "close": "Close"
+    },
+    "errors": {
+      "validEmail": "Please enter a valid email",
+      "ownEmail": "You cannot add your own email",
+      "emailExists": "Email already exists",
+      "messageRequired": "Please enter a message",
+      "invalidExpiry": "Please enter a valid amount",
+      "addPeople": "Please add at least one person"
     }
   },
   "Auth": {
@@ -79,7 +96,43 @@
     "alreadyHaveAccount": "Already have an account?",
     "dontHaveAccount": "Don't have an account?",
     "signingUp": "Signing up...",
-    "signingIn": "Signing in..."
+    "signingIn": "Signing in...",
+    "signinAccount": "Sign into your account",
+    "signupAccount": "Sign up for an account",
+    "withGoogle": "with Google",
+    "enterFullName": "Enter your full name",
+    "enterEmail": "Enter your email",
+    "signinSuccess": "Signed in successfully!",
+    "signupSuccess": "Signed up successfully!",
+    "googleAuthError": "Failed to sign in with Google.",
+    "PasswordStrength": {
+      "enterPassword": "Enter a password",
+      "veryWeak": "Very Weak",
+      "weak": "Weak",
+      "fair": "Fair",
+      "strong": "Strong",
+      "veryStrong": "Very Strong",
+      "reqMet": "{count}/5 requirements met",
+      "length": "At least 8 characters",
+      "uppercase": "Contains uppercase letters",
+      "lowercase": "Contains lowercase letters",
+      "number": "Contains numbers",
+      "special": "Contains special characters"
+    },
+    "Validation": {
+      "emailRequired": "Email is required",
+      "invalidEmail": "Please enter a valid email address",
+      "passwordRequired": "Password is required",
+      "fullNameRequired": "Full name is required",
+      "nameLength": "Name must be at least 2 characters",
+      "passwordLength": "Password must be at least 8 characters",
+      "passwordUppercase": "Must contain at least one uppercase letter",
+      "passwordLowercase": "Must contain at least one lowercase letter",
+      "passwordNumber": "Must contain at least one number",
+      "passwordSpecial": "Must contain at least one special character",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordsMatch": "Passwords don't match"
+    }
   },
   "Messages": {
     "SIGNUP_SUCCESSFUL": "Account created successfully!",
@@ -90,10 +143,20 @@
     "INCORRECT_PASSWORD": "Correct password is required.",
     "USER_NOT_FOUND": "User not found.",
     "INVALID_TOKEN": "Your session has expired. Please sign in again.",
+    "MESSAGE_CREATED": "Secret message created successfully!",
+    "MESSAGE_UPDATED": "Secret message updated successfully!",
+    "MESSAGE_DELETED": "Secret message moved to trash.",
+    "MESSAGE_PERMANENTLY_DELETED": "Secret message permanently deleted.",
+    "MESSAGE_NOT_FOUND": "Secret message not found.",
+    "MESSAGE_NOT_FOUND_OR_UNAUTHORIZED": "Message not found or you are not authorized.",
     "MESSAGE_RESTORED": "Secret message restored successfully!",
     "MESSAGES_PROCESSED": "Messages processed successfully!",
     "MESSAGES_RESTORED": "Messages restored successfully!",
+    "MESSAGES_NOT_FOUND_OR_UNAUTHORIZED": "Messages not found or you are not authorized.",
     "MESSAGE_RETRIEVED": "Secret message retrieved successfully!",
+    "MESSAGE_EXPIRED": "This message has expired and is no longer available.",
+    "CODE_REQUIRED": "Secret code is required to access this message.",
+    "ACCESS_DENIED": "You do not have permission to view this message.",
     "INTERNAL_ERROR": "An unexpected error occurred. Please try again later."
   }
 }

@@ -154,7 +154,7 @@ const Home = () => {
       if (!isInValidEmail) {
         setState((prevState) => ({
           ...prevState,
-          errors: { ...prevState.errors, addEmail: "Please enter a valid email" },
+          errors: { ...prevState.errors, addEmail: t("errors.validEmail") },
         }));
         return;
       }
@@ -162,7 +162,7 @@ const Home = () => {
       if (state.addEmailVal === user?.user?.email) {
         setState((prevState) => ({
           ...prevState,
-          errors: { ...prevState.errors, addEmail: "You cannot add your own email" },
+          errors: { ...prevState.errors, addEmail: t("errors.ownEmail") },
         }));
         return;
       }
@@ -171,7 +171,7 @@ const Home = () => {
       if (isAlready) {
         setState((prevState) => ({
           ...prevState,
-          errors: { ...prevState.errors, addEmail: "Email already exists" },
+          errors: { ...prevState.errors, addEmail: t("errors.emailExists") },
         }));
         return;
       }
@@ -211,12 +211,12 @@ const Home = () => {
     const errors: StateTypes["errors"] = {};
 
     if (!state.content.length) {
-      errors.message = "Please enter a message";
+      errors.message = t("errors.messageRequired");
     }
 
     if (state.expiryTime === "custom") {
       if (!state.customExpiryValue || parseInt(state.customExpiryValue) <= 0) {
-        errors.expiry = "Please enter a valid amount";
+        errors.expiry = t("errors.invalidExpiry");
       }
     }
 

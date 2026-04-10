@@ -23,16 +23,16 @@ export default function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="w-9 h-9">
+        <Button variant="ghost" size="icon" className="w-9 h-9 cursor-pointer">
           <Languages className="h-4 w-4" />
           <span className="sr-only">Toggle language</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
+        <DropdownMenuItem className="cursor-pointer" onClick={() => handleLanguageChange('en')}>
           English
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleLanguageChange('hi')}>
+        <DropdownMenuItem className="cursor-pointer" onClick={() => handleLanguageChange('hi')}>
           हिन्दी (Hindi)
         </DropdownMenuItem>
       </DropdownMenuContent>

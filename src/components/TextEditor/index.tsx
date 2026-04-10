@@ -4,6 +4,7 @@ import "react-quill-new/dist/quill.snow.css";
 import type { FC } from "react";
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 
 import { Spinner } from "../ui/spinner";
 
@@ -57,6 +58,7 @@ interface TextEditorProps {
 
 const TextEditor: FC<TextEditorProps> = ({ value = "", onChange }) => {
   const [editorValue, setEditorValue] = useState<string>(value);
+  const t = useTranslations("HomePage");
 
   const handleChange = (content: string) => {
     setEditorValue(content);
@@ -70,7 +72,7 @@ const TextEditor: FC<TextEditorProps> = ({ value = "", onChange }) => {
       onChange={handleChange}
       modules={modules}
       formats={formats}
-      placeholder="Write something amazing..."
+      placeholder={t("enterYourMessage")}
       className="w-[620px] h-[320px] rounded-md"
     />
   );

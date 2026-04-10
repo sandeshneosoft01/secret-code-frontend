@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import DialogLayout from "@/layouts/DialogLayout";
+import { useTranslations } from "next-intl";
 
 interface AddUserModalProps {
   isOpen: boolean;
@@ -39,19 +40,21 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
   onSearchChange,
   errors,
 }) => {
+  const t = useTranslations("HomePage.AddUserModal");
+
   return (
     <DialogLayout
       open={isOpen}
       contentClass="max-w-md w-full"
       dialogOverlayClass="backdrop-blur-[2px] bg-black/30"
       handleOpenChange={onClose}
-      title="Add User"
+      title={t("title")}
     >
       <div className="flex flex-col space-y-2">
         <div className="flex items-center space-x-3 w-full">
           <div className="w-full">
             <Input
-              placeholder="Enter user email"
+              placeholder={t("enterEmail")}
               type="email"
               value={addEmailVal}
               onChange={onEmailChange}
@@ -64,7 +67,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
             onClick={onAddEmail}
             disabled={!addEmailVal.length}
           >
-            Add
+            {t("add")}
           </Button>
         </div>
         {errors.addEmail && (
@@ -76,7 +79,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
         <div className="space-y-4 mt-4">
           <Input
             className="h-8 w-2/4"
-            placeholder="Search"
+            placeholder={t("search")}
             value={searchVal}
             onChange={onSearchChange}
           />
@@ -101,7 +104,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
           className="cursor-pointer w-fit ml-auto float-end"
           onClick={onClose}
         >
-          Close
+          {t("close")}
         </Button>
       </div>
     </DialogLayout>
