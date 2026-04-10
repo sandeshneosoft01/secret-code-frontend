@@ -9,6 +9,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <DialogLayout
+      modal={false}
       title={`${pathName === '/signup' ? 'Sign up' : 'Sign'} into your account`}
       contentClass="sm:max-w-sm"
       dialogOverlayClass="backdrop-blur-xl bg-black/30">

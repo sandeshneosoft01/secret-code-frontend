@@ -14,6 +14,7 @@ type PropTypes = {
   description?: string
   contentClass?: string
   open?: boolean
+  modal?: boolean
   dialogOverlayClass?: string
   handleOpenChange?: () => void
   showCloseButton?: boolean
@@ -26,12 +27,13 @@ const DialogLayout = (props: PropTypes) => {
     children,
     contentClass,
     open = true,
+    modal = true,
     dialogOverlayClass = '',
     handleOpenChange,
     showCloseButton = false
   } = props
   return (
-    <Dialog open={open} onOpenChange={() => handleOpenChange?.()}>
+    <Dialog open={open} onOpenChange={() => handleOpenChange?.()} modal={modal}>
       <DialogContent
         className={contentClass ? contentClass : 'w-full'}
         showCloseButton={showCloseButton}

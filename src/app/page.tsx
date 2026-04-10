@@ -374,6 +374,7 @@ const Home = () => {
   return (
     <div>
       <DialogLayout
+        modal={false}
         contentClass={`z-50 ${state.isNewMessage
           ? "sm:max-w-2xl"
           : codeParam && !state.isVerifyCode

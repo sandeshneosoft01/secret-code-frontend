@@ -58,6 +58,7 @@ const EnterCodePage = () => {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <DialogLayout
+        modal={false}
         contentClass={`z-50 ${!isVerified ? "sm:max-w-sm" : "sm:max-w-xl h-[80vh]"
           }`}
         dialogOverlayClass="backdrop-blur-xl bg-black/30"
