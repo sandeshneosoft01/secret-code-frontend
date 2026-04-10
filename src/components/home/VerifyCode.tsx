@@ -69,7 +69,7 @@ const VerifyCode: React.FC<VerifyCodeProps> = ({
           {error ? (
             <span className="text-sm text-red-500 font-medium">{error}</span>
           ) : (
-            <span className="text-sm text-gray-700 font-medium">
+            <span className="text-sm text-muted-foreground font-medium">
               Please enter your secret code to verify.
             </span>
           )}

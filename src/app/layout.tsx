@@ -50,9 +50,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased  bg-[url('/assets/images/background.png')] bg-no-repeat light`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[url('/assets/images/background.png')] bg-no-repeat dark:bg-none transition-colors duration-300`}
       >
         <NextTopLoader
           showSpinner={false}

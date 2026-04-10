@@ -96,8 +96,8 @@ const MessageForm: React.FC<MessageFormProps> = ({
 
           <div className="flex items-center space-x-2 pl-2 border-l ml-1">
             <Select value={expiryTime} onValueChange={onExpiryTimeChange}>
-              <SelectTrigger size="sm" className="h-8 border-none bg-transparent hover:bg-gray-100/50 shadow-none gap-1 px-1">
-                <Clock size={14} className="text-gray-400" />
+              <SelectTrigger size="sm" className="h-8 border-none bg-transparent hover:bg-accent/50 shadow-none gap-1 px-1 transition-colors duration-200">
+                <Clock size={14} className="text-muted-foreground" />
                 <SelectValue placeholder="Expire" />
               </SelectTrigger>
               <SelectContent>
@@ -129,7 +129,7 @@ const MessageForm: React.FC<MessageFormProps> = ({
                   min="0"
                 />
                 <Select value={customExpiryUnit} onValueChange={onCustomExpiryUnitChange}>
-                  <SelectTrigger size="sm" className="h-8 border-none bg-transparent hover:bg-gray-100/50 shadow-none px-1">
+                  <SelectTrigger size="sm" className="h-8 border-none bg-transparent hover:bg-accent/50 shadow-none px-1 transition-colors duration-200">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

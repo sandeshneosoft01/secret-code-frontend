@@ -124,6 +124,55 @@
     @apply bg-background text-foreground;
   }
 
+  /* Quill Editor Dark Mode Overrides */
+  .dark .ql-toolbar.ql-snow {
+    border-color: var(--border);
+    background-color: var(--secondary);
+  }
+
+  .dark .ql-container.ql-snow {
+    border-color: var(--border);
+    background-color: var(--card);
+    color: var(--foreground);
+  }
+
+  .dark .ql-snow .ql-stroke {
+    stroke: var(--foreground);
+  }
+
+  .dark .ql-snow .ql-fill,
+  .dark .ql-snow .ql-stroke.ql-fill {
+    fill: var(--foreground);
+  }
+
+  .dark .ql-snow .ql-picker {
+    color: var(--foreground);
+  }
+
+  .dark .ql-snow .ql-picker-options {
+    background-color: var(--popover);
+    border-color: var(--border);
+  }
+
+  .dark .ql-snow .ql-active,
+  .dark .ql-snow .ql-picker-label.ql-active,
+  .dark .ql-snow .ql-picker-label:hover,
+  .dark .ql-snow .ql-picker-item:hover,
+  .dark .ql-snow button:hover,
+  .dark .ql-snow button.ql-active {
+    color: var(--primary) !important;
+  }
+
+  .dark .ql-snow button:hover .ql-stroke,
+  .dark .ql-snow button.ql-active .ql-stroke {
+    stroke: var(--primary) !important;
+  }
+
+  .dark .ql-snow button:hover .ql-fill,
+  .dark .ql-snow button.ql-active .ql-fill {
+    fill: var(--primary) !important;
+  }
+
   /* Custom Scrollbar Styles for Webkit Browsers */
   ::-webkit-scrollbar {
     width: 8px;

@@ -64,14 +64,15 @@ const Login = () => {
           </Button>
         </form>
       </Form>
-      <div className="text-center mt-4">
-        <p className="text-sm text-gray-600">
+      <div className="text-center mt-6">
+        <p className="text-sm text-muted-foreground">
           Don&apos;t have an account?&nbsp;
-          <Link href="/signup" className="text-black font-semibold underline">
+          <Link href="/signup" className="text-primary font-semibold hover:underline transition-all duration-200">
             Sign up
           </Link>
         </p>
       </div>
+
     </div>
   )
 }

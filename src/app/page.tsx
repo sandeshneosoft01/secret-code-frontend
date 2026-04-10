@@ -384,10 +384,10 @@ const Home = () => {
       >
         {state.isLoading && (
           <div className="space-y-4">
-            <Skeleton className="h-20 w-full bg-gray-300 rounded-sm" />
-            <Skeleton className="h-3.5 w-[75%] rounded-sm bg-gray-300" />
-            <Skeleton className="h-3.5 w-[50%] rounded-sm bg-gray-300" />
-            <Skeleton className="h-3.5 w-[75%] rounded-sm bg-gray-300" />
+            <Skeleton className="h-20 w-full bg-muted rounded-sm" />
+            <Skeleton className="h-3.5 w-[75%] rounded-sm bg-muted" />
+            <Skeleton className="h-3.5 w-[50%] rounded-sm bg-muted" />
+            <Skeleton className="h-3.5 w-[75%] rounded-sm bg-muted" />
           </div>
         )}
 
