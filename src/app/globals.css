@@ -173,6 +173,16 @@
     fill: var(--primary) !important;
   }
 
+  /* Quill Editor Placeholder Fix */
+  .ql-snow .ql-editor.ql-blank::before {
+    color: var(--muted-foreground) !important;
+    font-style: normal !important;
+  }
+  
+  .dark .ql-snow .ql-editor.ql-blank::before {
+    color: var(--muted-foreground) !important;
+  }
+
   /* Custom Scrollbar Styles for Webkit Browsers */
   ::-webkit-scrollbar {
     width: 8px;

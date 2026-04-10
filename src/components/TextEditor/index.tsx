@@ -2,16 +2,17 @@
 
 import "react-quill-new/dist/quill.snow.css";
 import type { FC } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 
 import { Spinner } from "../ui/spinner";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), {
   ssr: false,
   loading: () => (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center w-[620px] h-[320px] rounded-md border border-border bg-card">
       <Spinner  />
     </div>
   ),
@@ -59,11 +60,19 @@ interface TextEditorProps {
 const TextEditor: FC<TextEditorProps> = ({ value = "", onChange }) => {
   const [editorValue, setEditorValue] = useState<string>(value);
   const t = useTranslations("HomePage");
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleChange = (content: string) => {
     setEditorValue(content);
     onChange?.(content);
   };
+
+  const isDark = mounted && resolvedTheme === "dark";
 
   return (
     <ReactQuill
@@ -73,7 +82,7 @@ const TextEditor: FC<TextEditorProps> = ({ value = "", onChange }) => {
       modules={modules}
       formats={formats}
       placeholder={t("enterYourMessage")}
-      className="w-[620px] h-[320px] rounded-md"
+      className={`w-[620px] h-[320px] rounded-md ${isDark ? "dark" : ""}`}
     />
   );
 };

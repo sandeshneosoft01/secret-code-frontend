@@ -1,4 +1,3 @@
-import { toast } from 'sonner'
 import { api } from './api'
 import { useStore } from '@/store'
 import type { SignInUserPayload, SignUpUserPayload } from '@/types'
@@ -8,7 +7,7 @@ export const getProfileDetails = async () => {
         const response = await api.get('/api/v1/profile-details')
         return response.data
     } catch (error: any) {
-        if (error.response.status === 401) {
+        if (error.response?.status === 401) {
             setTimeout(() => {
                 useStore.getState().logout()
                 localStorage.clear()
@@ -16,8 +15,7 @@ export const getProfileDetails = async () => {
                 window.location.href = `/sign-in?redirect=${currentPath}`
             }, 1200)
         }
-        toast.error(error.response.data.message)
-        throw new Error(error.response.data.message)
+        throw error
     }
 }
 
@@ -26,8 +24,7 @@ export const signUpUser = async (data: SignUpUserPayload) => {
         const response = await api.post('/api/v1/signup', data)
         return response.data
     } catch (error: any) {
-        toast.error(error.response.data.message)
-        throw new Error(error.response.data.message)
+        throw error
     }
 }
 
@@ -36,8 +33,7 @@ export const signInUser = async (data: SignInUserPayload) => {
         const response = await api.post('/api/v1/signin', data)
         return response.data
     } catch (error: any) {
-        toast.error(error.response.data.message)
-        throw new Error(error.response.data.message)
+        throw error
     }
 }
 
@@ -46,8 +42,7 @@ export const signUpWithGoogle = async (idToken: string) => {
         const response = await api.post('/api/v1/signup/google', { idToken })
         return response.data
     } catch (error: any) {
-        toast.error(error.response.data.error)
-        throw new Error(error.response.data.error)
+        throw error
     }
 }
 
@@ -56,8 +51,6 @@ export const signInWithGoogle = async (idToken: string) => {
         const response = await api.post('/api/v1/signin/google', { idToken })
         return response.data
     } catch (error: any) {
-        console.log("xoxo", error.response.data.error)
-        toast.error(error.response.data.error)
-        throw new Error(error.response.data.error)
+        throw error
     }
 }

@@ -173,7 +173,7 @@ const MessageForm: React.FC<MessageFormProps> = ({
         )}
       </div>
       <div className="mt-4 w-full h-96 relative">
-        <TextEditor value={content} onChange={onContentChange} t={t} />
+        <TextEditor value={content} onChange={onContentChange} />
         {errors.message && (
           <p className="text-red-500 text-xs mt-1">{errors.message}</p>
         )}
