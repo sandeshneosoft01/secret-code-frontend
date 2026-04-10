@@ -5,10 +5,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import DialogLayout from "@/layouts/DialogLayout";
 import VerifyCode from "@/components/home/VerifyCode";
 import { useGetMessageByCode } from "@/hooks/use-messages";
+import { useStore } from "@/store";
 
 const EnterCodePage = () => {
   const [userCode, setUserCode] = useState("");
   const [messageContent, setMessageContent] = useState("");
+  const user = useStore((state) => state.user);
 
   const {
     mutate: verifyCode,
@@ -29,9 +31,11 @@ const EnterCodePage = () => {
           if (response.success) {
             setMessageContent(response.data.content);
             toast.success("Message retrieved successfully!");
-            toast.info("This message will be destroyed soon", {
-              position: "top-center",
-            });
+            if (response.data.sender !== user?.user?.id) {
+              toast.info("This message will be destroyed soon", {
+                position: "top-center",
+              });
+            }
           }
         },
         onError: (error: any) => {

@@ -10,6 +10,7 @@ import DialogLayout from "@/layouts/DialogLayout";
 import { Button } from "@/components/ui/button";
 import { generateSecretCode, isValidEmailFn } from "@/lib/utils";
 import { editorContent } from "@/constant";
+import { useStore } from "@/store";
 
 import VerifyCode from "@/components/home/VerifyCode";
 import MessageList from "@/components/home/MessageList";
@@ -69,6 +70,7 @@ const Home = () => {
   const updateMessage = useUpdateMessage();
   const deleteMessage = useDeleteMessage();
   const restoreMessage = useRestoreMessage();
+  const user = useStore((state) => state.user);
   const searchParams = useSearchParams();
   const codeParam = searchParams.get("code");
   const [state, setState] = useState<StateTypes>(initialState);
@@ -152,6 +154,15 @@ const Home = () => {
         }));
         return;
       }
+
+      if (state.addEmailVal === user?.user?.email) {
+        setState((prevState) => ({
+          ...prevState,
+          errors: { ...prevState.errors, addEmail: "You cannot add your own email" },
+        }));
+        return;
+      }
+
       const isAlready = state.emailLists.includes(state.addEmailVal);
       if (isAlready) {
         setState((prevState) => ({

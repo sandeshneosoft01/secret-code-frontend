@@ -11,6 +11,7 @@ export interface Message {
   accessTime: string;
   code: string;
   status: "new" | "expiry" | "delete";
+  viewCount: number;
   expiresAt?: string;
   createdAt: string;
   updatedAt: string;

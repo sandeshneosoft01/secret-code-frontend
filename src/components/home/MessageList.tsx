@@ -2,6 +2,7 @@
 import React from "react";
 import { Pencil, RefreshCcw, Trash, Users, ViewIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
   Tooltip,
   TooltipContent,
@@ -53,6 +54,12 @@ const MessageList: React.FC<MessageListProps> = ({
       });
     }
   };
+
+  const handleCopyCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    toast.success("Code copied to clipboard");
+  };
+
   const filteredMessages = messages.filter(
     (message) => message.status === activeStatus,
   );
@@ -124,16 +131,17 @@ const MessageList: React.FC<MessageListProps> = ({
                         <span>{message.emailLists.length}</span>
                       </Button>
                     </div>
-                    <div className="flex flex-col w-fit">
-                      <span className="font-medium text-gray-600">Code</span>
-                      <Button
-                        className="px-2 text-sm"
-                        variant="outline"
-                        size="sm"
-                      >
-                        {message.code}
-                      </Button>
-                    </div>
+                      <div className="flex flex-col w-fit">
+                        <span className="font-medium text-gray-600">Code</span>
+                        <Button
+                          className="px-2 text-sm cursor-pointer"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleCopyCode(message.code)}
+                        >
+                          {message.code}
+                        </Button>
+                      </div>
                     <div className="flex flex-col w-fit">
                       <span className="font-medium text-gray-600">View</span>
                       <Button
@@ -142,7 +150,7 @@ const MessageList: React.FC<MessageListProps> = ({
                         size="sm"
                       >
                         <ViewIcon size={14} />
-                        <span>0</span>
+                        <span>{message.viewCount}</span>
                       </Button>
                     </div>
                   </div>
