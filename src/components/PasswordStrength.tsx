@@ -74,7 +74,7 @@ const PasswordStrength = ({ password = '' }: PasswordStrengthProps) => {
   return (
     <div className="mt-4 space-y-4 animate-in fade-in slide-in-from-top-2 duration-500">
       <div className="space-y-2">
-        <div className="flex items-center justify-between text-xs font-medium">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-medium">
           <div className="flex items-center gap-1.5">
             {password.length > 0 && getShieldIcon()}
             <span className={cn(

@@ -98,10 +98,10 @@ const Signup = () => {
           </Button>
         </form>
       </Form>
-      <div className="text-center mt-4">
-        <p className="text-sm text-gray-600">
-          Already account?&nbsp;
-          <Link href="/login" className="text-black font-semibold underline">
+      <div className="text-center mt-6 pb-2">
+        <p className="text-sm text-muted-foreground">
+          Already have an account?&nbsp;
+          <Link href="/login" className="text-primary font-semibold hover:underline transition-all">
             Sign in
           </Link>
         </p>
