@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from '@/i18n/navigation'
 import { useStore } from '@/store'
 
@@ -10,8 +10,15 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const user = useStore((state) => state.user)
   const router = useRouter()
   const pathname = usePathname()
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isMounted) return
+
     const isPublicRoute = publicRoutes.includes(pathname)
 
     if (!user && !isPublicRoute) {
@@ -23,7 +30,17 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
         router.replace('/')
       }
     }
-  }, [user, pathname, router])
+  }, [user, pathname, router, isMounted])
+
+  if (!isMounted) return null
+
+  const isPublicRoute = publicRoutes.includes(pathname)
+
+  // Prevent flash of protected content before redirect
+  if (!user && !isPublicRoute) return null
+
+  // Prevent flash of auth content before redirect
+  if (user && isPublicRoute && pathname !== '/enter-code') return null
 
   return <>{children}</>
 }
