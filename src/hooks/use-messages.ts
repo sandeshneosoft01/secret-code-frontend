@@ -5,11 +5,15 @@ import { getMessageByCode } from "@/services/message-service";
 
 export interface Message {
   id: string;
+  _id?: string;
   emailLists: string[];
   content: string;
   accessTime: string;
   code: string;
   status: "new" | "expiry" | "delete";
+  expiresAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL_LOCAL || "http://localhost:8000";
@@ -74,6 +78,45 @@ export const useCreateMessage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
       toast.success("Message saved successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+export interface UpdateMessagePayload extends Partial<CreateMessagePayload> {
+  id: string;
+}
+
+export const useUpdateMessage = () => {
+  const queryClient = useQueryClient();
+  const user = useStore((state) => state.user);
+
+  return useMutation({
+    mutationFn: async (updatedMessage: UpdateMessagePayload) => {
+      if (!user?.token) throw new Error("User not authenticated");
+
+      const { id, ...payload } = updatedMessage;
+      const response = await fetch(`${API_BASE_URL}/api/v1/messages/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || errorData.message || "Failed to update message");
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["messages"] });
+      toast.success("Message updated successfully");
     },
     onError: (error: Error) => {
       toast.error(error.message);

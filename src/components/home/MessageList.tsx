@@ -16,7 +16,7 @@ interface MessageListProps {
   isLoading?: boolean;
   activeStatus: "new" | "expiry" | "delete";
   onStatusChange: (status: "new" | "expiry" | "delete") => void;
-  onEdit: () => void;
+  onEdit: (message: Message) => void;
   onDelete: () => void;
 }
 
@@ -125,7 +125,7 @@ const MessageList: React.FC<MessageListProps> = ({
                             className="cursor-pointer"
                             variant="outline"
                             size="sm"
-                            onClick={onEdit}
+                            onClick={() => onEdit(message)}
                           >
                             <Pencil size={14} />
                           </Button>

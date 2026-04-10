@@ -36,6 +36,7 @@ interface MessageFormProps {
   onCustomExpiryUnitChange: (value: string) => void;
   onSave: () => void;
   onCancel: () => void;
+  isEditing?: boolean;
 }
 
 const MessageForm: React.FC<MessageFormProps> = ({
@@ -57,6 +58,7 @@ const MessageForm: React.FC<MessageFormProps> = ({
   onCustomExpiryValueChange,
   customExpiryUnit,
   onCustomExpiryUnitChange,
+  isEditing,
 }) => {
   return (
     <div className="mt-0">
@@ -184,7 +186,7 @@ const MessageForm: React.FC<MessageFormProps> = ({
             onClick={onSave}
             disabled={isSaving}
           >
-            {isSaving ? "Saving..." : "Save"}
+            {isSaving ? "Saving..." : isEditing ? "Update" : "Save"}
           </Button>
         </div>
       </div>

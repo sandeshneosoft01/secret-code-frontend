@@ -16,7 +16,7 @@ import MessageList from "@/components/home/MessageList";
 import MessageForm from "@/components/home/MessageForm";
 import AddUserModal from "@/components/home/AddUserModal";
 
-import { useMessages, useCreateMessage, Message } from "@/hooks/use-messages";
+import { useMessages, useCreateMessage, useUpdateMessage, Message } from "@/hooks/use-messages";
 
 type StateTypes = {
   isLoading: boolean;
@@ -40,6 +40,7 @@ type StateTypes = {
   expiryTime: string;
   customExpiryValue: string;
   customExpiryUnit: string;
+  editingMessage: Message | null;
 };
 
 const initialState: StateTypes = {
@@ -59,11 +60,13 @@ const initialState: StateTypes = {
   expiryTime: "10m",
   customExpiryValue: "10",
   customExpiryUnit: "m",
+  editingMessage: null,
 };
 
 const Home = () => {
   const { data: messages = [], isLoading: isMessagesLoading } = useMessages();
   const createMessage = useCreateMessage();
+  const updateMessage = useUpdateMessage();
   const searchParams = useSearchParams();
   const codeParam = searchParams.get("code");
   const [state, setState] = useState<StateTypes>(initialState);
@@ -96,6 +99,22 @@ const Home = () => {
     setState((prevState) => ({
       ...prevState,
       isNewMessage: !prevState.isNewMessage,
+      editingMessage: null,
+      content: "",
+      emailLists: [],
+      code: generateSecretCode(),
+    }));
+  };
+
+  const handleEditMessage = (message: Message) => {
+    setState((prevState) => ({
+      ...prevState,
+      isNewMessage: true,
+      editingMessage: message,
+      content: message.content,
+      emailLists: message.emailLists,
+      code: message.code,
+      isAddCode: !!message.code,
     }));
   };
 
@@ -197,27 +216,53 @@ const Home = () => {
       return;
     }
 
-    createMessage.mutate(
-      {
-        content: state.content,
-        emailLists: state.emailLists,
-        code: state.code,
-        expiryTime: state.expiryTime,
-        customExpiryValue: state.customExpiryValue,
-        customExpiryUnit: state.customExpiryUnit,
-      },
-      {
-        onSuccess: () => {
-          setState((prevState) => ({
-            ...prevState,
-            isNewMessage: false,
-            content: "",
-            emailLists: [],
-            code: generateSecretCode(),
-          }));
+    if (state.editingMessage) {
+      updateMessage.mutate(
+        {
+          id: state.editingMessage.id || state.editingMessage._id as string,
+          content: state.content,
+          emailLists: state.emailLists,
+          code: state.code,
+          expiryTime: state.expiryTime,
+          customExpiryValue: state.customExpiryValue,
+          customExpiryUnit: state.customExpiryUnit,
         },
-      },
-    );
+        {
+          onSuccess: () => {
+            setState((prevState) => ({
+              ...prevState,
+              isNewMessage: false,
+              editingMessage: null,
+              content: "",
+              emailLists: [],
+              code: generateSecretCode(),
+            }));
+          },
+        },
+      );
+    } else {
+      createMessage.mutate(
+        {
+          content: state.content,
+          emailLists: state.emailLists,
+          code: state.code,
+          expiryTime: state.expiryTime,
+          customExpiryValue: state.customExpiryValue,
+          customExpiryUnit: state.customExpiryUnit,
+        },
+        {
+          onSuccess: () => {
+            setState((prevState) => ({
+              ...prevState,
+              isNewMessage: false,
+              content: "",
+              emailLists: [],
+              code: generateSecretCode(),
+            }));
+          },
+        },
+      );
+    }
   };
 
   const handleToggleAddCode = () => {
@@ -330,7 +375,7 @@ const Home = () => {
                 emailCount={state.emailLists.length}
                 secretCode={state.code}
                 isAddCode={state.isAddCode}
-                isSaving={createMessage.isPending}
+                isSaving={createMessage.isPending || updateMessage.isPending}
                 errors={state.errors}
                 onContentChange={handleContentChange}
                 onToggleAddUser={handleToggleAddNewUserModal}
@@ -344,6 +389,7 @@ const Home = () => {
                 onCustomExpiryValueChange={handleCustomExpiryValueChange}
                 customExpiryUnit={state.customExpiryUnit}
                 onCustomExpiryUnitChange={handleCustomExpiryUnitChange}
+                isEditing={!!state.editingMessage}
               />
             ) : (
               <>
@@ -370,7 +416,7 @@ const Home = () => {
                   isLoading={isMessagesLoading}
                   activeStatus={state.activeStatus}
                   onStatusChange={handleChangeActiveStatus}
-                  onEdit={handleToggleNewMessage}
+                  onEdit={handleEditMessage}
                   onDelete={handleToggleNewMessage}
                 />
               </>
