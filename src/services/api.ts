@@ -2,7 +2,7 @@ import { useStore } from '@/store'
 import axios from 'axios'
 import { toast } from 'sonner'
 
-const URL: string | undefined = process.env.PROD
+const URL: string | undefined = process.env.NODE_ENV === 'production'
     ? process.env.NEXT_PUBLIC_API_URL_PROD
     : process.env.NEXT_PUBLIC_API_URL
 
