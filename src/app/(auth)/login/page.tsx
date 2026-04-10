@@ -1,5 +1,7 @@
 'use client'
 
+import { useIsMutating } from '@tanstack/react-query'
+
 import GoogleAuth from '@/components/GoogleAuth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,6 +15,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 
 const Login = () => {
   const { mutate: signin, isPending } = useSignin()
+  const isMutating = useIsMutating()
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -59,8 +62,8 @@ const Login = () => {
             />
           </div>
 
-          <Button className="w-full mt-8 cursor-pointer" type="submit" disabled={isPending}>
-            {isPending ? 'Signing in...' : 'Sign in'}
+          <Button className="w-full mt-8 cursor-pointer" type="submit" disabled={isPending || isMutating > 0}>
+            {isPending || isMutating > 0 ? 'Signing in...' : 'Sign in'}
           </Button>
         </form>
       </Form>

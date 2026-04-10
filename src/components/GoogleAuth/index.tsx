@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import { toast } from 'sonner'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useIsMutating } from '@tanstack/react-query'
 import { signInWithPopup } from 'firebase/auth'
 
 import { Button } from '../ui/button'
@@ -22,6 +22,7 @@ type PropTypes = {
 const GoogleAuth = (props: PropTypes) => {
   const { title, loginType } = props
   const navigate = useRouter()
+  const isMutating = useIsMutating()
   const mutation = useMutation({
     mutationFn: loginType === 'signin' ? signInWithGoogle : signUpWithGoogle,
     onSuccess: (data) => handleSuccess(data),
@@ -56,7 +57,7 @@ const GoogleAuth = (props: PropTypes) => {
     <Button
       className="cursor-pointer w-full"
       variant="outline"
-      disabled={mutation.isPending}
+      disabled={mutation.isPending || isMutating > 0}
       onClick={handleSignInGoogle}
     >
       <Image

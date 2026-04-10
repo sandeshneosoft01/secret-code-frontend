@@ -1,4 +1,5 @@
 'use client'
+import { useIsMutating } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 
@@ -15,6 +16,7 @@ import PasswordStrength from '@/components/PasswordStrength'
 
 const Signup = () => {
   const { mutate: signup, isPending } = useSignup()
+  const isMutating = useIsMutating()
   const form = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
     mode: 'all',
@@ -93,8 +95,8 @@ const Signup = () => {
             />
           </div>
 
-          <Button className="w-full mt-8 cursor-pointer" type="submit" disabled={isPending}>
-            {isPending ? 'Signing up...' : 'Sign up'}
+          <Button className="w-full mt-8 cursor-pointer" type="submit" disabled={isPending || isMutating > 0}>
+            {isPending || isMutating > 0 ? 'Signing up...' : 'Sign up'}
           </Button>
         </form>
       </Form>

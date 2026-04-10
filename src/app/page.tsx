@@ -372,121 +372,119 @@ const Home = () => {
   }, [state.userCode]);
 
   return (
-    <div>
-      <DialogLayout
-        modal={false}
-        contentClass={`z-50 ${state.isNewMessage
-          ? "sm:max-w-2xl"
-          : codeParam && !state.isVerifyCode
-            ? "sm:max-w-sm"
-            : "sm:max-w-xl h-[80vh]"
-          }`}
-        dialogOverlayClass="backdrop-blur-xl bg-black/30"
-      >
-        {state.isLoading && (
-          <div className="space-y-4">
-            <Skeleton className="h-20 w-full bg-muted rounded-sm" />
-            <Skeleton className="h-3.5 w-[75%] rounded-sm bg-muted" />
-            <Skeleton className="h-3.5 w-[50%] rounded-sm bg-muted" />
-            <Skeleton className="h-3.5 w-[75%] rounded-sm bg-muted" />
-          </div>
-        )}
+    <DialogLayout
+      modal={false}
+      contentClass={`z-50 ${state.isNewMessage
+        ? "sm:max-w-2xl"
+        : codeParam && !state.isVerifyCode
+          ? "sm:max-w-sm"
+          : "sm:max-w-xl h-[80vh]"
+        }`}
+      dialogOverlayClass="backdrop-blur-xl bg-black/30"
+    >
+      {state.isLoading && (
+        <div className="space-y-4">
+          <Skeleton className="h-20 w-full bg-muted rounded-sm" />
+          <Skeleton className="h-3.5 w-[75%] rounded-sm bg-muted" />
+          <Skeleton className="h-3.5 w-[50%] rounded-sm bg-muted" />
+          <Skeleton className="h-3.5 w-[75%] rounded-sm bg-muted" />
+        </div>
+      )}
 
-        {codeParam && !state.isVerifyCode ? (
-          <VerifyCode
-            onVerify={handleVerifyUserCode}
-            onChangeCode={handleChangeCode}
-            isVerifyCode={state.isVerifyCode}
+      {codeParam && !state.isVerifyCode ? (
+        <VerifyCode
+          onVerify={handleVerifyUserCode}
+          onChangeCode={handleChangeCode}
+          isVerifyCode={state.isVerifyCode}
+        />
+      ) : (
+        state.isVerifyCode && (
+          <div
+            className="h-full overflow-auto"
+            dangerouslySetInnerHTML={{ __html: editorContent }}
           />
-        ) : (
-          state.isVerifyCode && (
-            <div
-              className="h-full overflow-auto"
-              dangerouslySetInnerHTML={{ __html: editorContent }}
-            />
-          )
-        )}
+        )
+      )}
 
-        {!codeParam && !state.isLoading && (
-          <div className="flex flex-col w-full">
-            {state.isNewMessage ? (
-              <MessageForm
-                content={state.content}
-                emailCount={state.emailLists.length}
-                secretCode={state.code}
-                isAddCode={state.isAddCode}
-                isSaving={createMessage.isPending || updateMessage.isPending}
-                errors={state.errors}
-                onContentChange={handleContentChange}
-                onToggleAddUser={handleToggleAddNewUserModal}
-                onToggleAddCode={handleToggleAddCode}
-                onGenerateCode={handleGenerateCode}
-                onSave={handleSaveMessage}
-                onCancel={handleToggleNewMessage}
-                expiryTime={state.expiryTime}
-                onExpiryTimeChange={handleExpiryTimeChange}
-                customExpiryValue={state.customExpiryValue}
-                onCustomExpiryValueChange={handleCustomExpiryValueChange}
-                customExpiryUnit={state.customExpiryUnit}
-                onCustomExpiryUnitChange={handleCustomExpiryUnitChange}
-                isEditing={!!state.editingMessage}
-              />
-            ) : (
-              <>
-                <div className="flex justify-end gap-3">
-                  <Link href="/enter-code">
-                    <Button
-                      className="cursor-pointer"
-                      size="sm"
-                      variant="outline"
-                    >
-                      Enter Code
-                    </Button>
-                  </Link>
+      {!codeParam && !state.isLoading && (
+        <div className="flex flex-col w-full">
+          {state.isNewMessage ? (
+            <MessageForm
+              content={state.content}
+              emailCount={state.emailLists.length}
+              secretCode={state.code}
+              isAddCode={state.isAddCode}
+              isSaving={createMessage.isPending || updateMessage.isPending}
+              errors={state.errors}
+              onContentChange={handleContentChange}
+              onToggleAddUser={handleToggleAddNewUserModal}
+              onToggleAddCode={handleToggleAddCode}
+              onGenerateCode={handleGenerateCode}
+              onSave={handleSaveMessage}
+              onCancel={handleToggleNewMessage}
+              expiryTime={state.expiryTime}
+              onExpiryTimeChange={handleExpiryTimeChange}
+              customExpiryValue={state.customExpiryValue}
+              onCustomExpiryValueChange={handleCustomExpiryValueChange}
+              customExpiryUnit={state.customExpiryUnit}
+              onCustomExpiryUnitChange={handleCustomExpiryUnitChange}
+              isEditing={!!state.editingMessage}
+            />
+          ) : (
+            <>
+              <div className="flex justify-end gap-3">
+                <Link href="/enter-code">
                   <Button
                     className="cursor-pointer"
                     size="sm"
-                    onClick={handleToggleNewMessage}
+                    variant="outline"
                   >
-                    Add Message
+                    Enter Code
                   </Button>
-                </div>
-                <MessageList
-                  messages={messages}
-                  isLoading={isMessagesLoading}
-                  activeStatus={state.activeStatus}
-                  onStatusChange={handleChangeActiveStatus}
-                  onEdit={handleEditMessage}
-                  onDelete={handleDeleteMessage}
-                  isDeleting={deleteMessage.isPending || bulkDeleteMessages.isPending}
-                  onRestore={handleRestoreMessage}
-                  isRestoring={restoreMessage.isPending || bulkRestoreMessages.isPending}
-                  onBulkDelete={handleBulkDeleteMessages}
-                  onBulkRestore={handleBulkRestoreMessages}
-                />
-              </>
-            )}
-          </div>
-        )}
+                </Link>
+                <Button
+                  className="cursor-pointer"
+                  size="sm"
+                  onClick={handleToggleNewMessage}
+                >
+                  Add Message
+                </Button>
+              </div>
+              <MessageList
+                messages={messages}
+                isLoading={isMessagesLoading}
+                activeStatus={state.activeStatus}
+                onStatusChange={handleChangeActiveStatus}
+                onEdit={handleEditMessage}
+                onDelete={handleDeleteMessage}
+                isDeleting={deleteMessage.isPending || bulkDeleteMessages.isPending}
+                onRestore={handleRestoreMessage}
+                isRestoring={restoreMessage.isPending || bulkRestoreMessages.isPending}
+                onBulkDelete={handleBulkDeleteMessages}
+                onBulkRestore={handleBulkRestoreMessages}
+              />
+            </>
+          )}
+        </div>
+      )}
 
-        {state.isOpenAddUser && (
-          <AddUserModal
-            isOpen={state.isOpenAddUser}
-            onClose={handleToggleAddNewUserModal}
-            addEmailVal={state.addEmailVal}
-            onEmailChange={handleChangeAddEmail}
-            onAddEmail={handleAddEmail}
-            onKeyDown={handleKeyDownAddEmail}
-            filteredEmails={filteredEmails}
-            emailLists={state.emailLists}
-            onRemoveEmail={handleRemoveEmail}
-            searchVal={state.emailSearchVal}
-            onSearchChange={handleChangeSearchVal}
-            errors={state.errors}
-          />
-        )}
-      </DialogLayout>
-    </div>
+      {state.isOpenAddUser && (
+        <AddUserModal
+          isOpen={state.isOpenAddUser}
+          onClose={handleToggleAddNewUserModal}
+          addEmailVal={state.addEmailVal}
+          onEmailChange={handleChangeAddEmail}
+          onAddEmail={handleAddEmail}
+          onKeyDown={handleKeyDownAddEmail}
+          filteredEmails={filteredEmails}
+          emailLists={state.emailLists}
+          onRemoveEmail={handleRemoveEmail}
+          searchVal={state.emailSearchVal}
+          onSearchChange={handleChangeSearchVal}
+          errors={state.errors}
+        />
+      )}
+    </DialogLayout>
   );
 };
 
