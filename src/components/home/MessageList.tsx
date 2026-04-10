@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Pencil, Trash, Users, ViewIcon } from "lucide-react";
+import { Pencil, RefreshCcw, Trash, Users, ViewIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -20,6 +20,8 @@ interface MessageListProps {
   onEdit: (message: Message) => void;
   onDelete: (messageId: string, onSuccess?: () => void) => void;
   isDeleting?: boolean;
+  onRestore: (messageId: string) => void;
+  isRestoring?: boolean;
 }
 
 const MessageList: React.FC<MessageListProps> = ({
@@ -30,6 +32,8 @@ const MessageList: React.FC<MessageListProps> = ({
   onEdit,
   onDelete,
   isDeleting = false,
+  onRestore,
+  isRestoring = false,
 }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [messageToDelete, setMessageToDelete] = React.useState<string | null>(
@@ -159,6 +163,29 @@ const MessageList: React.FC<MessageListProps> = ({
                           <p>Edit</p>
                         </TooltipContent>
                       </Tooltip>
+                      {activeStatus === "delete" && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              className="cursor-pointer"
+                              variant="outline"
+                              size="sm"
+                              onClick={() =>
+                                onRestore(message.id || (message._id as string))
+                              }
+                              disabled={isRestoring}
+                            >
+                              <RefreshCcw
+                                size={14}
+                                className={isRestoring ? "animate-spin" : ""}
+                              />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Restore</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button

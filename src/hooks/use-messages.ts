@@ -161,3 +161,35 @@ export const useDeleteMessage = () => {
     },
   });
 };
+
+export const useRestoreMessage = () => {
+  const queryClient = useQueryClient();
+  const user = useStore((state) => state.user);
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      if (!user?.token) throw new Error("User not authenticated");
+
+      const response = await fetch(`${API_BASE_URL}/api/v1/messages/${id}/restore`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || errorData.message || "Failed to restore message");
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["messages"] });
+      toast.success("Message restored successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+};
