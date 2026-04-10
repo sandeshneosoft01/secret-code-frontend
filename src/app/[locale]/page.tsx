@@ -1,7 +1,8 @@
 "use client";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { Link, useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -76,6 +77,7 @@ const Home = () => {
   const searchParams = useSearchParams();
   const codeParam = searchParams.get("code");
   const [state, setState] = useState<StateTypes>(initialState);
+  const t = useTranslations("HomePage");
 
   const handleChangeCode = (value: string) => {
     if (!state.isVerifyCode) {
@@ -88,9 +90,9 @@ const Home = () => {
 
   const handleVerifyUserCode = async () => {
     if (!state.isVerifyCode && state.userCode.length === 6) {
-      toast.info("Verify process...");
+      toast.info(t("verifyProcess"));
       setTimeout(() => {
-        toast.info("This message destroyed after 10 minutes", {
+        toast.info(t("destroyedAfter"), {
           position: "top-center",
         });
       }, 2000);
@@ -439,7 +441,7 @@ const Home = () => {
                     size="sm"
                     variant="outline"
                   >
-                    Enter Code
+                    {t("enterCode")}
                   </Button>
                 </Link>
                 <Button
@@ -447,7 +449,7 @@ const Home = () => {
                   size="sm"
                   onClick={handleToggleNewMessage}
                 >
-                  Add Message
+                  {t("addMessage")}
                 </Button>
               </div>
               <MessageList

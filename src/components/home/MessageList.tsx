@@ -11,8 +11,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import DeleteConfirmModal from "./DeleteConfirmModal";
-
 import { Message } from "@/hooks/use-messages";
+import { useTranslations } from "next-intl";
 
 interface MessageListProps {
   messages: Message[];
@@ -41,6 +41,7 @@ const MessageList: React.FC<MessageListProps> = ({
   onBulkDelete,
   onBulkRestore,
 }) => {
+  const t = useTranslations("HomePage");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [messageToDelete, setMessageToDelete] = React.useState<string | string[] | null>(
     null,
@@ -107,7 +108,7 @@ const MessageList: React.FC<MessageListProps> = ({
 
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
-    toast.success("Code copied to clipboard");
+    toast.success(t("MessageList.codeCopied"));
   };
 
   const selectedCount = React.useMemo(() => {
@@ -135,7 +136,7 @@ const MessageList: React.FC<MessageListProps> = ({
                 htmlFor="select-all"
                 className="text-xs text-muted-foreground font-medium cursor-pointer"
               >
-                {selectedCount > 0 ? `${selectedCount} selected` : "Select All"}
+                {selectedCount > 0 ? `${selectedCount} ${t("MessageList.selected")}` : t("MessageList.selectAll")}
               </label>
             </div>
           )}
@@ -150,7 +151,7 @@ const MessageList: React.FC<MessageListProps> = ({
                   disabled={isRestoring}
                 >
                   <RefreshCcw size={12} className={`mr-1 ${isRestoring ? "animate-spin" : ""}`} />
-                  Restore
+                  {t("MessageList.restore")}
                 </Button>
               )}
               <Button
@@ -161,7 +162,7 @@ const MessageList: React.FC<MessageListProps> = ({
                 disabled={isDeleting}
               >
                 <Trash size={12} className="mr-1" />
-                Delete
+                {t("MessageList.delete")}
               </Button>
             </div>
           )}
@@ -173,7 +174,7 @@ const MessageList: React.FC<MessageListProps> = ({
             className="text-xs h-7 px-3 cursor-pointer"
             onClick={() => onStatusChange("new")}
           >
-            New
+            {t("messages.new")}
           </Button>
           <Button
             size="sm"
@@ -181,7 +182,7 @@ const MessageList: React.FC<MessageListProps> = ({
             className="text-xs h-7 px-3 cursor-pointer"
             onClick={() => onStatusChange("expiry")}
           >
-            Expiry
+            {t("messages.expiry")}
           </Button>
           <Button
             size="sm"
@@ -189,14 +190,14 @@ const MessageList: React.FC<MessageListProps> = ({
             className="text-xs h-7 px-3 cursor-pointer"
             onClick={() => onStatusChange("delete")}
           >
-            Trash
+            {t("messages.delete")}
           </Button>
         </div>
       </div>
       <div className="relative overflow-auto h-80 space-y-2 mt-4">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
-            <span className="text-sm text-muted-foreground">Loading messages...</span>
+            <span className="text-sm text-muted-foreground">{t("MessageList.loading")}</span>
           </div>
         ) : filteredMessages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full space-y-3 animate-in fade-in zoom-in duration-300">
@@ -204,8 +205,8 @@ const MessageList: React.FC<MessageListProps> = ({
               <MessageSquareOff size={32} className="text-muted-foreground/50" />
             </div>
             <div className="text-center">
-              <p className="text-sm font-medium text-foreground">No messages found</p>
-              <p className="text-xs text-muted-foreground">Items you create will appear here.</p>
+              <p className="text-sm font-medium text-foreground">{t("MessageList.noMessages")}</p>
+              <p className="text-xs text-muted-foreground">{t("MessageList.noMessagesSub")}</p>
             </div>
           </div>
         ) : (
@@ -226,7 +227,7 @@ const MessageList: React.FC<MessageListProps> = ({
                   <div className="pt-0.5 text-muted-foreground font-medium">{index + 1}.</div>
                   <div className="w-full">
                     <div>
-                      <span className="font-semibold text-foreground">Message</span>
+                      <span className="font-semibold text-foreground">{t("MessageList.message")}</span>
                       <div
                         className="mt-1 w-full line-clamp-2 text-muted-foreground leading-relaxed transition-colors duration-200"
                         dangerouslySetInnerHTML={{
@@ -237,14 +238,14 @@ const MessageList: React.FC<MessageListProps> = ({
                     <div className="mt-4 flex items-end justify-between w-full">
                       <div className="flex items-center space-x-4 text-xs">
                         <div className="flex flex-col gap-1">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">People</span>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("MessageList.people")}</span>
                           <Badge variant="outline" className="h-7 px-2 font-medium bg-muted/50 transition-colors">
                             <Users size={12} className="mr-1 text-muted-foreground" />
                             {message.emailLists.length}
                           </Badge>
                         </div>
                         <div className="flex flex-col gap-1">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Code</span>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("MessageList.code")}</span>
                           <Badge
                             variant="outline"
                             className="h-7 px-2 font-mono cursor-pointer hover:bg-accent transition-colors bg-muted/50"
@@ -254,7 +255,7 @@ const MessageList: React.FC<MessageListProps> = ({
                           </Badge>
                         </div>
                         <div className="flex flex-col gap-1">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Views</span>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("MessageList.views")}</span>
                           <Badge variant="outline" className="h-7 px-2 font-medium bg-muted/50 transition-colors">
                             <ViewIcon size={12} className="mr-1 text-muted-foreground" />
                             {message.viewCount}
@@ -274,7 +275,7 @@ const MessageList: React.FC<MessageListProps> = ({
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>Edit Message</p>
+                            <p>{t("MessageList.editMessage")}</p>
                           </TooltipContent>
                         </Tooltip>
                         {activeStatus === "delete" && (
@@ -295,7 +296,7 @@ const MessageList: React.FC<MessageListProps> = ({
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>Restore Message</p>
+                              <p>{t("MessageList.restoreMessage")}</p>
                             </TooltipContent>
                           </Tooltip>
                         )}
@@ -312,7 +313,7 @@ const MessageList: React.FC<MessageListProps> = ({
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>{activeStatus === 'delete' ? 'Permanently Delete' : 'Move to Trash'}</p>
+                            <p>{activeStatus === 'delete' ? t("MessageList.permanentlyDelete") : t("MessageList.moveToTrash")}</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -331,17 +332,17 @@ const MessageList: React.FC<MessageListProps> = ({
         isDeleting={isDeleting}
         title={
           Array.isArray(messageToDelete)
-            ? (activeStatus === "delete" ? "Permanently Delete Selected" : "Move Selected to Trash")
-            : (activeStatus === "delete" ? "Permanently Delete Message" : "Move to Trash")
+            ? (activeStatus === "delete" ? t("MessageList.modal.permDeleteSelected") : t("MessageList.modal.moveSelectedToTrash"))
+            : (activeStatus === "delete" ? t("MessageList.modal.permDeleteMessage") : t("MessageList.modal.moveToTrash"))
         }
         description={
           Array.isArray(messageToDelete)
             ? (activeStatus === "delete"
-              ? `Are you sure you want to permanently delete these ${messageToDelete.length} messages? This action cannot be undone.`
-              : `Are you sure you want to move these ${messageToDelete.length} messages to the trash?`)
+              ? t("MessageList.modal.permDeleteConfirmSelected", { count: messageToDelete.length })
+              : t("MessageList.modal.moveSelectedConfirm", { count: messageToDelete.length }))
             : (activeStatus === "delete"
-              ? "Are you sure you want to permanently delete this message? This action cannot be undone."
-              : "Are you sure you want to move this message to the trash?")
+              ? t("MessageList.modal.permDeleteConfirm")
+              : t("MessageList.modal.moveToTrashConfirm"))
         }
       />
     </div>

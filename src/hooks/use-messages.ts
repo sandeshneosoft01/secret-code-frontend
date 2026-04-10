@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useStore } from "@/store";
 import { getMessageByCode } from "@/services/message-service";
-import { getFriendlyMessage } from "@/constant/messages";
+import { useTranslations } from "next-intl";
 
 export interface Message {
   id: string;
@@ -54,6 +54,7 @@ export interface CreateMessagePayload {
 }
 
 export const useCreateMessage = () => {
+  const t = useTranslations('Messages');
   const queryClient = useQueryClient();
   const user = useStore((state) => state.user);
 
@@ -72,17 +73,17 @@ export const useCreateMessage = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || errorData.message || "Failed to create message");
+        throw new Error(errorData.code || errorData.error || errorData.message || "INTERNAL_ERROR");
       }
 
       return response.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success(getFriendlyMessage(data.message || "MESSAGE_CREATED"));
+      toast.success(t(data.code || "MESSAGE_CREATED" as any));
     },
     onError: (error: Error) => {
-      toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
+      toast.error(t(error.message as any || "INTERNAL_ERROR"));
     },
   });
 };
@@ -92,6 +93,7 @@ export interface UpdateMessagePayload extends Partial<CreateMessagePayload> {
 }
 
 export const useUpdateMessage = () => {
+  const t = useTranslations('Messages');
   const queryClient = useQueryClient();
   const user = useStore((state) => state.user);
 
@@ -111,17 +113,17 @@ export const useUpdateMessage = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || errorData.message || "Failed to update message");
+        throw new Error(errorData.code || errorData.error || errorData.message || "INTERNAL_ERROR");
       }
 
       return response.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success(getFriendlyMessage(data.message || "MESSAGE_UPDATED"));
+      toast.success(t(data.code || "MESSAGE_UPDATED" as any));
     },
     onError: (error: Error) => {
-      toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
+      toast.error(t(error.message as any || "INTERNAL_ERROR"));
     },
   });
 };
@@ -133,6 +135,7 @@ export const useGetMessageByCode = () => {
 };
 
 export const useDeleteMessage = () => {
+  const t = useTranslations('Messages');
   const queryClient = useQueryClient();
   const user = useStore((state) => state.user);
 
@@ -149,22 +152,23 @@ export const useDeleteMessage = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || errorData.message || "Failed to delete message");
+        throw new Error(errorData.code || errorData.error || errorData.message || "INTERNAL_ERROR");
       }
 
       return response.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success(getFriendlyMessage(data.message || "MESSAGE_DELETED"));
+      toast.success(t(data.code || "MESSAGE_DELETED" as any));
     },
     onError: (error: Error) => {
-      toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
+      toast.error(t(error.message as any || "INTERNAL_ERROR"));
     },
   });
 };
 
 export const useRestoreMessage = () => {
+  const t = useTranslations('Messages');
   const queryClient = useQueryClient();
   const user = useStore((state) => state.user);
 
@@ -181,22 +185,23 @@ export const useRestoreMessage = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || errorData.message || "Failed to restore message");
+        throw new Error(errorData.code || errorData.error || errorData.message || "INTERNAL_ERROR");
       }
 
       return response.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success(getFriendlyMessage(data.message || "MESSAGE_RESTORED"));
+      toast.success(t(data.code || "MESSAGE_RESTORED" as any));
     },
     onError: (error: Error) => {
-      toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
+      toast.error(t(error.message as any || "INTERNAL_ERROR"));
     },
   });
 };
 
 export const useBulkDeleteMessages = () => {
+  const t = useTranslations('Messages');
   const queryClient = useQueryClient();
   const user = useStore((state) => state.user);
 
@@ -215,22 +220,23 @@ export const useBulkDeleteMessages = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to delete messages");
+        throw new Error(errorData.code || errorData.message || "INTERNAL_ERROR");
       }
 
       return response.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success(getFriendlyMessage(data.message || "MESSAGES_PROCESSED"));
+      toast.success(t(data.code || "MESSAGES_PROCESSED" as any));
     },
     onError: (error: Error) => {
-      toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
+      toast.error(t(error.message as any || "INTERNAL_ERROR"));
     },
   });
 };
 
 export const useBulkRestoreMessages = () => {
+  const t = useTranslations('Messages');
   const queryClient = useQueryClient();
   const user = useStore((state) => state.user);
 
@@ -249,17 +255,17 @@ export const useBulkRestoreMessages = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to restore messages");
+        throw new Error(errorData.code || errorData.message || "INTERNAL_ERROR");
       }
 
       return response.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success(getFriendlyMessage(data.message || "MESSAGES_RESTORED"));
+      toast.success(t(data.code || "MESSAGES_RESTORED" as any));
     },
     onError: (error: Error) => {
-      toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
+      toast.error(t(error.message as any || "INTERNAL_ERROR"));
     },
   });
 };

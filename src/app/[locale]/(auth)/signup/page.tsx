@@ -1,7 +1,8 @@
 'use client'
 import { useIsMutating } from '@tanstack/react-query'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { useForm } from 'react-hook-form'
+import { useTranslations } from 'next-intl'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signupSchema, SignupValues } from '@/lib/validations'
@@ -15,6 +16,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import PasswordStrength from '@/components/PasswordStrength'
 
 const Signup = () => {
+  const t = useTranslations('Auth')
   const { mutate: signup, isPending } = useSignup()
   const isMutating = useIsMutating()
   const form = useForm<SignupValues>({
@@ -36,7 +38,7 @@ const Signup = () => {
 
   return (
     <div>
-      <GoogleAuth title="Sign up with Google" loginType="signup" />
+      <GoogleAuth title={`${t('signup')} with Google`} loginType="signup" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="mt-5">
           <div className="space-y-4">
@@ -45,7 +47,7 @@ const Signup = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel>{t('fullName')}</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter your full name" {...field} />
                   </FormControl>
@@ -58,7 +60,7 @@ const Signup = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('email')}</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter your email" type="email" {...field} />
                   </FormControl>
@@ -71,7 +73,7 @@ const Signup = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t('password')}</FormLabel>
                   <FormControl>
                     <Input placeholder="********" type="password" {...field} />
                   </FormControl>
@@ -85,7 +87,7 @@ const Signup = () => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>{t('confirmPassword')}</FormLabel>
                   <FormControl>
                     <Input placeholder="********" type="password" {...field} />
                   </FormControl>
@@ -96,15 +98,15 @@ const Signup = () => {
           </div>
 
           <Button className="w-full mt-8 cursor-pointer" type="submit" disabled={isPending || isMutating > 0}>
-            {isPending || isMutating > 0 ? 'Signing up...' : 'Sign up'}
+            {isPending || isMutating > 0 ? t('signingUp') : t('signup')}
           </Button>
         </form>
       </Form>
       <div className="text-center mt-6 pb-2">
         <p className="text-sm text-muted-foreground">
-          Already have an account?&nbsp;
+          {t('alreadyHaveAccount')}&nbsp;
           <Link href="/login" className="text-primary font-semibold hover:underline transition-all">
-            Sign in
+            {t('signin')}
           </Link>
         </p>
       </div>

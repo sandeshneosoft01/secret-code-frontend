@@ -6,9 +6,10 @@ import DialogLayout from "@/layouts/DialogLayout";
 import VerifyCode from "@/components/home/VerifyCode";
 import { useGetMessageByCode } from "@/hooks/use-messages";
 import { useStore } from "@/store";
-import { getFriendlyMessage } from "@/constant/messages";
+import { useTranslations } from "next-intl";
 
 const EnterCodePage = () => {
+  const t = useTranslations();
   const [userCode, setUserCode] = useState("");
   const [messageContent, setMessageContent] = useState("");
   const user = useStore((state) => state.user);
@@ -31,16 +32,17 @@ const EnterCodePage = () => {
         onSuccess: (response) => {
           if (response.success) {
             setMessageContent(response.data.content);
-            toast.success(getFriendlyMessage(response.message || "MESSAGE_RETRIEVED"));
+            toast.success(t(`Messages.${response.code || "MESSAGE_RETRIEVED"}` as any));
             if (response.data.sender !== user?.user?.id) {
-              toast.info("This message will be destroyed soon", {
+              toast.info(t("HomePage.destroySoon"), {
                 position: "top-center",
               });
             }
           }
         },
         onError: (error: any) => {
-          toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
+          const code = error.response?.data?.code || "INTERNAL_ERROR";
+          toast.error(t(`Messages.${code}` as any));
           setUserCode("");
         },
       });

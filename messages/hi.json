@@ -1,0 +1,99 @@
+{
+  "HomePage": {
+    "title": "गुप्त संदेश",
+    "description": "सुरक्षित और स्वतः नष्ट होने वाले संदेश",
+    "addMessage": "संदेश जोड़ें",
+    "enterCode": "कोड दर्ज करें",
+    "verifyProcess": "सत्यापन प्रक्रिया...",
+    "destroyedAfter": "यह संदेश 10 मिनट के बाद नष्ट हो गया",
+    "enterYourMessage": "अपना संदेश दर्ज करें",
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "update": "अपडेट करें",
+    "saving": "सहेजा जा रहा है...",
+    "addPeople": "लोग जोड़ें",
+    "generate": "बनाएँ",
+    "addCode": "कोड जोड़ें",
+    "code": "कोड",
+    "expire": "समाप्ति",
+    "expiryOptions": {
+      "10m": "10 मिनट",
+      "1h": "1 घंटा",
+      "1d": "1 दिन",
+      "never": "कभी नहीं",
+      "custom": "कस्टम",
+      "m": "मिनट",
+      "h": "घंटे",
+      "d": "दिन"
+    },
+    "messages": {
+      "new": "नया",
+      "expiry": "समाप्ति",
+      "delete": "कचरा"
+    },
+    "destroySoon": "यह संदेश जल्द ही नष्ट कर दिया जाएगा",
+    "MessageList": {
+      "selectAll": "सभी चुनें",
+      "selected": "चयनित",
+      "restore": "बहाल करें",
+      "delete": "हटाएं",
+      "loading": "संदेश लोड हो रहे हैं...",
+      "noMessages": "कोई संदेश नहीं मिला",
+      "noMessagesSub": "आपके द्वारा बनाए गए आइटम यहाँ दिखाई देंगे।",
+      "message": "संदेश",
+      "people": "लोग",
+      "code": "कोड",
+      "views": "दृश्य",
+      "editMessage": "संदेश संपादित करें",
+      "restoreMessage": "संदेश बहाल करें",
+      "permanentlyDelete": "स्थायी रूप से हटाएं",
+      "moveToTrash": "कचरे में डालें",
+      "codeCopied": "कोड क्लिपबोर्ड पर कॉपी किया गया",
+      "modal": {
+        "permDeleteSelected": "चयनित को स्थायी रूप से हटाएं",
+        "moveSelectedToTrash": "चयनित को कचरे में डालें",
+        "permDeleteMessage": "संदेश को स्थायी रूप से हटाएं",
+        "moveToTrash": "कचरे में डालें",
+        "permDeleteConfirmSelected": "क्या आप वाकई इन {count} संदेशों को स्थायी रूप से हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती।",
+        "moveSelectedConfirm": "क्या आप वाकई इन {count} संदेशों को कचरे में डालना चाहते हैं?",
+        "permDeleteConfirm": "क्या आप वाकई इस संदेश को स्थायी रूप से हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती।",
+        "moveToTrashConfirm": "क्या आप वाकई इस संदेश को कचरे में डालना चाहते हैं?"
+      }
+    },
+    "VerifyCode": {
+      "enterCode": "अपना कोड दर्ज करें",
+      "enterSecret": "कृपया अपना गुप्त कोड दर्ज करें।",
+      "enterComplete": "कृपया पूरा 6-अंकीय कोड दर्ज करें।",
+      "enterToVerify": "सत्यापित करने के लिए कृपया अपना गुप्त कोड दर्ज करें।",
+      "verify": "सत्यापित करें"
+    }
+  },
+  "Auth": {
+    "signup": "साइन अप करें",
+    "signin": "साइन इन करें",
+    "logout": "लॉगआउट",
+    "fullName": "पूरा नाम",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "alreadyHaveAccount": "क्या आपके पास पहले से खाता है?",
+    "dontHaveAccount": "खाता नहीं है?",
+    "signingUp": "साइन अप हो रहा है...",
+    "signingIn": "साइन इन हो रहा है..."
+  },
+  "Messages": {
+    "SIGNUP_SUCCESSFUL": "खाता सफलतापूर्वक बनाया गया!",
+    "SIGNIN_SUCCESSFUL": "सफलतापूर्वक साइन इन किया गया!",
+    "EMAIL_ALREADY_REGISTERED": "यह ईमेल पहले से पंजीकृत है।",
+    "INVALID_CREDENTIALS": "अमान्य ईमेल या पासवर्ड।",
+    "ACCOUNT_SUSPENDED": "आपका खाता निलंबित कर दिया गया है। कृपया सहायता से संपर्क करें।",
+    "INCORRECT_PASSWORD": "सही पासवर्ड आवश्यक है।",
+    "USER_NOT_FOUND": "उपयोगकर्ता नहीं मिला।",
+    "INVALID_TOKEN": "आपका सत्र समाप्त हो गया है। कृपया फिर से साइन इन करें।",
+    "MESSAGE_RESTORED": "गुप्त संदेश सफलतापूर्वक बहाल किया गया!",
+    "MESSAGES_PROCESSED": "संदेश सफलतापूर्वक संसाधित किए गए!",
+    "MESSAGES_RESTORED": "संदेश सफलतापूर्वक बहाल किए गए!",
+    "MESSAGE_RETRIEVED": "गुप्त संदेश सफलतापूर्वक प्राप्त किया गया!",
+    "INTERNAL_ERROR": "एक अप्रत्याशित त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।"
+  }
+}

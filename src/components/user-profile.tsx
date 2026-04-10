@@ -19,13 +19,17 @@ import {
 } from "./ui/dropdown-menu";
 import { LogOut, User } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslations } from "next-intl";
 
 const UserProfile = () => {
   const user = useStore((s) => s.user);
   const logout = useStore((s) => s.logout);
+  const t = useTranslations("Auth");
 
   return (
     <div className="absolute right-0 top-0 z-100 p-3 flex gap-2 items-center">
+      <LanguageSwitcher />
       <ThemeToggle />
       {user && (
         <DropdownMenu>
@@ -50,7 +54,7 @@ const UserProfile = () => {
               onClick={() => logout()}
             >
               <LogOut className="mr-2 h-4 w-4" />
-              <span>Log out</span>
+              <span>{t("logout")}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 interface VerifyCodeProps {
   onVerify: () => void;
@@ -20,16 +21,17 @@ const VerifyCode: React.FC<VerifyCodeProps> = ({
   onChangeCode,
   isVerifyCode,
 }) => {
+  const t = useTranslations("HomePage.VerifyCode");
   const [code, setCode] = React.useState("");
   const [error, setError] = React.useState("");
 
   const handleVerify = () => {
     if (code.length === 0) {
-      setError("Please enter your secret code.");
+      setError(t("enterSecret"));
       return;
     }
     if (code.length < 6) {
-      setError("Please enter a complete 6-digit code.");
+      setError(t("enterComplete"));
       return;
     }
     setError("");
@@ -47,7 +49,7 @@ const VerifyCode: React.FC<VerifyCodeProps> = ({
   return (
     <div>
       <div className="space-y-2">
-        <Label className="text-[16px]">Enter your code</Label>
+        <Label className="text-[16px]">{t("enterCode")}</Label>
         <InputOTP
           onChange={handleChange}
           className="flex items-center justify-center mx-auto"
@@ -70,7 +72,7 @@ const VerifyCode: React.FC<VerifyCodeProps> = ({
             <span className="text-sm text-red-500 font-medium">{error}</span>
           ) : (
             <span className="text-sm text-muted-foreground font-medium">
-              Please enter your secret code to verify.
+              {t("enterToVerify")}
             </span>
           )}
         </div>
@@ -81,7 +83,7 @@ const VerifyCode: React.FC<VerifyCodeProps> = ({
         className="mt-6 cursor-pointer text-md w-full sm:w-auto"
         onClick={handleVerify}
       >
-        Verify
+        {t("verify")}
       </Button>
     </div>
   );

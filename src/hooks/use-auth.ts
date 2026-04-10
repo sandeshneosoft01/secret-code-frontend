@@ -4,9 +4,10 @@ import { useRouter } from 'next/navigation'
 import { signInUser, signUpUser } from '@/services/user-service'
 import { useStore } from '@/store'
 import type { SignInUserPayload, SignUpUserPayload } from '@/types'
-import { getFriendlyMessage } from '@/constant/messages'
+import { useTranslations } from 'next-intl'
 
 export const useSignin = () => {
+  const t = useTranslations('Messages')
   const router = useRouter()
   const setUser = useStore((state) => state.setUser)
 
@@ -17,16 +18,18 @@ export const useSignin = () => {
         token: response.token,
         user: response.user,
       })
-      toast.success(getFriendlyMessage(response.message || 'SIGNIN_SUCCESSFUL'))
+      toast.success(t(response.code || 'SIGNIN_SUCCESSFUL'))
       router.push('/')
     },
     onError: (error: any) => {
-      toast.error(getFriendlyMessage(error.message || error.error || 'INTERNAL_ERROR'))
+      const code = error.response?.data?.code || 'INTERNAL_ERROR'
+      toast.error(t(code as any))
     },
   })
 }
 
 export const useSignup = () => {
+  const t = useTranslations('Messages')
   const router = useRouter()
   const setUser = useStore((state) => state.setUser)
 
@@ -37,11 +40,12 @@ export const useSignup = () => {
         token: response.token,
         user: response.user,
       })
-      toast.success(getFriendlyMessage(response.message || 'SIGNUP_SUCCESSFUL'))
+      toast.success(t(response.code || 'SIGNUP_SUCCESSFUL'))
       router.push('/')
     },
     onError: (error: any) => {
-      toast.error(getFriendlyMessage(error.message || error.error || 'INTERNAL_ERROR'))
+      const code = error.response?.data?.code || 'INTERNAL_ERROR'
+      toast.error(t(code as any))
     },
   })
 }

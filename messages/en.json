@@ -1,0 +1,99 @@
+{
+  "HomePage": {
+    "title": "Secret Message",
+    "description": "Secure & Self-Destructing Messages",
+    "addMessage": "Add Message",
+    "enterCode": "Enter Code",
+    "verifyProcess": "Verify process...",
+    "destroyedAfter": "This message destroyed after 10 minutes",
+    "enterYourMessage": "Enter your message",
+    "save": "Save",
+    "cancel": "Cancel",
+    "update": "Update",
+    "saving": "Saving...",
+    "addPeople": "Add People",
+    "generate": "Generate",
+    "addCode": "Add Code",
+    "code": "Code",
+    "expire": "Expire",
+    "expiryOptions": {
+      "10m": "10 Mins",
+      "1h": "1 Hour",
+      "1d": "1 Day",
+      "never": "Never",
+      "custom": "Custom",
+      "m": "Mins",
+      "h": "Hours",
+      "d": "Days"
+    },
+    "messages": {
+      "new": "New",
+      "expiry": "Expiry",
+      "delete": "Trash"
+    },
+    "destroySoon": "This message will be destroyed soon",
+    "MessageList": {
+      "selectAll": "Select All",
+      "selected": "selected",
+      "restore": "Restore",
+      "delete": "Delete",
+      "loading": "Loading messages...",
+      "noMessages": "No messages found",
+      "noMessagesSub": "Items you create will appear here.",
+      "message": "Message",
+      "people": "People",
+      "code": "Code",
+      "views": "Views",
+      "editMessage": "Edit Message",
+      "restoreMessage": "Restore Message",
+      "permanentlyDelete": "Permanently Delete",
+      "moveToTrash": "Move to Trash",
+      "codeCopied": "Code copied to clipboard",
+      "modal": {
+        "permDeleteSelected": "Permanently Delete Selected",
+        "moveSelectedToTrash": "Move Selected to Trash",
+        "permDeleteMessage": "Permanently Delete Message",
+        "moveToTrash": "Move to Trash",
+        "permDeleteConfirmSelected": "Are you sure you want to permanently delete these {count} messages? This action cannot be undone.",
+        "moveSelectedConfirm": "Are you sure you want to move these {count} messages to the trash?",
+        "permDeleteConfirm": "Are you sure you want to permanently delete this message? This action cannot be undone.",
+        "moveToTrashConfirm": "Are you sure you want to move this message to the trash?"
+      }
+    },
+    "VerifyCode": {
+      "enterCode": "Enter your code",
+      "enterSecret": "Please enter your secret code.",
+      "enterComplete": "Please enter a complete 6-digit code.",
+      "enterToVerify": "Please enter your secret code to verify.",
+      "verify": "Verify"
+    }
+  },
+  "Auth": {
+    "signup": "Sign up",
+    "signin": "Sign in",
+    "logout": "Logout",
+    "fullName": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "signingUp": "Signing up...",
+    "signingIn": "Signing in..."
+  },
+  "Messages": {
+    "SIGNUP_SUCCESSFUL": "Account created successfully!",
+    "SIGNIN_SUCCESSFUL": "Signed in successfully!",
+    "EMAIL_ALREADY_REGISTERED": "This email is already registered.",
+    "INVALID_CREDENTIALS": "Invalid email or password.",
+    "ACCOUNT_SUSPENDED": "Your account is suspended. Please contact support.",
+    "INCORRECT_PASSWORD": "Correct password is required.",
+    "USER_NOT_FOUND": "User not found.",
+    "INVALID_TOKEN": "Your session has expired. Please sign in again.",
+    "MESSAGE_RESTORED": "Secret message restored successfully!",
+    "MESSAGES_PROCESSED": "Messages processed successfully!",
+    "MESSAGES_RESTORED": "Messages restored successfully!",
+    "MESSAGE_RETRIEVED": "Secret message retrieved successfully!",
+    "INTERNAL_ERROR": "An unexpected error occurred. Please try again later."
+  }
+}

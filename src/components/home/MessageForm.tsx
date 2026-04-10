@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import TextEditor from "@/components/TextEditor";
+import { useTranslations } from "next-intl";
 
 interface MessageFormProps {
   content: string;
@@ -60,6 +61,8 @@ const MessageForm: React.FC<MessageFormProps> = ({
   onCustomExpiryUnitChange,
   isEditing,
 }) => {
+  const t = useTranslations("HomePage");
+
   return (
     <div className="mt-0">
       <div className="flex items-center justify-between border-t border-b py-2">
@@ -73,7 +76,7 @@ const MessageForm: React.FC<MessageFormProps> = ({
               onClick={onToggleAddUser}
             >
               <Plus size={16} />
-              <span className="text-sm font-medium">Add People</span>
+              <span className="text-sm font-medium">{t("addPeople")}</span>
             </Button>
             {errors.addPeople && (
               <p className="text-red-500 text-[10px] font-medium leading-none">
@@ -98,14 +101,14 @@ const MessageForm: React.FC<MessageFormProps> = ({
             <Select value={expiryTime} onValueChange={onExpiryTimeChange}>
               <SelectTrigger size="sm" className="h-8 border-none bg-transparent hover:bg-accent/50 shadow-none gap-1 px-1 transition-colors duration-200">
                 <Clock size={14} className="text-muted-foreground" />
-                <SelectValue placeholder="Expire" />
+                <SelectValue placeholder={t("expire")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="10m">10 Mins</SelectItem>
-                <SelectItem value="1h">1 Hour</SelectItem>
-                <SelectItem value="1d">1 Day</SelectItem>
-                <SelectItem value="never">Never</SelectItem>
-                <SelectItem value="custom">Custom</SelectItem>
+                <SelectItem value="10m">{t("expiryOptions.10m")}</SelectItem>
+                <SelectItem value="1h">{t("expiryOptions.1h")}</SelectItem>
+                <SelectItem value="1d">{t("expiryOptions.1d")}</SelectItem>
+                <SelectItem value="never">{t("expiryOptions.never")}</SelectItem>
+                <SelectItem value="custom">{t("expiryOptions.custom")}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -133,9 +136,9 @@ const MessageForm: React.FC<MessageFormProps> = ({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="m">Mins</SelectItem>
-                    <SelectItem value="h">Hours</SelectItem>
-                    <SelectItem value="d">Days</SelectItem>
+                    <SelectItem value="m">{t("expiryOptions.m")}</SelectItem>
+                    <SelectItem value="h">{t("expiryOptions.h")}</SelectItem>
+                    <SelectItem value="d">{t("expiryOptions.d")}</SelectItem>
                   </SelectContent>
                 </Select>
                 {errors.expiry && (
@@ -154,7 +157,7 @@ const MessageForm: React.FC<MessageFormProps> = ({
               {secretCode}
             </Badge>
             <Button size="sm" className="cursor-pointer" onClick={onGenerateCode}>
-              Generate
+              {t("generate")}
             </Button>
           </div>
         ) : (
@@ -164,13 +167,13 @@ const MessageForm: React.FC<MessageFormProps> = ({
             className="cursor-pointer"
             onClick={onToggleAddCode}
           >
-            {!secretCode ? "Add" : ""}&nbsp;Code
+            {t("addCode")}
             {secretCode ? ` : ${secretCode}` : ""}
           </Button>
         )}
       </div>
       <div className="mt-4 w-full h-96 relative">
-        <TextEditor value={content} onChange={onContentChange} />
+        <TextEditor value={content} onChange={onContentChange} t={t} />
         {errors.message && (
           <p className="text-red-500 text-xs mt-1">{errors.message}</p>
         )}
@@ -179,14 +182,14 @@ const MessageForm: React.FC<MessageFormProps> = ({
       <div className="border-t py-2 mt-4">
         <div className="flex items-center space-x-3 float-end">
           <Button variant="outline" className="cursor-pointer" onClick={onCancel}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button
             className="cursor-pointer"
             onClick={onSave}
             disabled={isSaving}
           >
-            {isSaving ? "Saving..." : isEditing ? "Update" : "Save"}
+            {isSaving ? t("saving") : isEditing ? t("update") : t("save")}
           </Button>
         </div>
       </div>
