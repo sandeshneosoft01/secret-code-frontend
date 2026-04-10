@@ -6,6 +6,7 @@ import DialogLayout from "@/layouts/DialogLayout";
 import VerifyCode from "@/components/home/VerifyCode";
 import { useGetMessageByCode } from "@/hooks/use-messages";
 import { useStore } from "@/store";
+import { getFriendlyMessage } from "@/constant/messages";
 
 const EnterCodePage = () => {
   const [userCode, setUserCode] = useState("");
@@ -30,7 +31,7 @@ const EnterCodePage = () => {
         onSuccess: (response) => {
           if (response.success) {
             setMessageContent(response.data.content);
-            toast.success("Message retrieved successfully!");
+            toast.success(getFriendlyMessage(response.message || "MESSAGE_RETRIEVED"));
             if (response.data.sender !== user?.user?.id) {
               toast.info("This message will be destroyed soon", {
                 position: "top-center",
@@ -39,14 +40,7 @@ const EnterCodePage = () => {
           }
         },
         onError: (error: any) => {
-          const message = error.message;
-          if (message === "MESSAGE_NOT_FOUND") {
-            toast.error("Invalid code. Please check and try again.");
-          } else if (message === "MESSAGE_EXPIRED") {
-            toast.error("This message has expired and is no longer available.");
-          } else {
-            toast.error("An unexpected error occurred. Please try again.");
-          }
+          toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
           setUserCode("");
         },
       });

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { signInUser, signUpUser } from '@/services/user-service'
 import { useStore } from '@/store'
 import type { SignInUserPayload, SignUpUserPayload } from '@/types'
+import { getFriendlyMessage } from '@/constant/messages'
 
 export const useSignin = () => {
   const router = useRouter()
@@ -16,10 +17,11 @@ export const useSignin = () => {
         token: response.token,
         user: response.user,
       })
-      toast.success('Signed in successfully!')
+      toast.success(getFriendlyMessage(response.message || 'SIGNIN_SUCCESSFUL'))
       router.push('/')
     },
     onError: (error: any) => {
+      toast.error(getFriendlyMessage(error.message || error.error || 'INTERNAL_ERROR'))
     },
   })
 }
@@ -35,10 +37,11 @@ export const useSignup = () => {
         token: response.token,
         user: response.user,
       })
-      toast.success('Account created successfully!')
+      toast.success(getFriendlyMessage(response.message || 'SIGNUP_SUCCESSFUL'))
       router.push('/')
     },
     onError: (error: any) => {
+      toast.error(getFriendlyMessage(error.message || error.error || 'INTERNAL_ERROR'))
     },
   })
 }

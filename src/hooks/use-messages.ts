@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useStore } from "@/store";
 import { getMessageByCode } from "@/services/message-service";
+import { getFriendlyMessage } from "@/constant/messages";
 
 export interface Message {
   id: string;
@@ -76,12 +77,12 @@ export const useCreateMessage = () => {
 
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success("Message saved successfully");
+      toast.success(getFriendlyMessage(data.message || "MESSAGE_CREATED"));
     },
     onError: (error: Error) => {
-      toast.error(error.message);
+      toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
     },
   });
 };
@@ -115,12 +116,12 @@ export const useUpdateMessage = () => {
 
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success("Message updated successfully");
+      toast.success(getFriendlyMessage(data.message || "MESSAGE_UPDATED"));
     },
     onError: (error: Error) => {
-      toast.error(error.message);
+      toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
     },
   });
 };
@@ -153,12 +154,12 @@ export const useDeleteMessage = () => {
 
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success("Message deleted successfully");
+      toast.success(getFriendlyMessage(data.message || "MESSAGE_DELETED"));
     },
     onError: (error: Error) => {
-      toast.error(error.message);
+      toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
     },
   });
 };
@@ -185,12 +186,12 @@ export const useRestoreMessage = () => {
 
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success("Message restored successfully");
+      toast.success(getFriendlyMessage(data.message || "MESSAGE_RESTORED"));
     },
     onError: (error: Error) => {
-      toast.error(error.message);
+      toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
     },
   });
 };
@@ -219,12 +220,12 @@ export const useBulkDeleteMessages = () => {
 
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success("Messages deleted successfully");
+      toast.success(getFriendlyMessage(data.message || "MESSAGES_PROCESSED"));
     },
     onError: (error: Error) => {
-      toast.error(error.message);
+      toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
     },
   });
 };
@@ -253,12 +254,12 @@ export const useBulkRestoreMessages = () => {
 
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success("Messages restored successfully");
+      toast.success(getFriendlyMessage(data.message || "MESSAGES_RESTORED"));
     },
     onError: (error: Error) => {
-      toast.error(error.message);
+      toast.error(getFriendlyMessage(error.message || "INTERNAL_ERROR"));
     },
   });
 };
