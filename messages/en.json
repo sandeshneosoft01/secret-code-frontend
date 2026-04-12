@@ -86,6 +86,7 @@
     }
   },
   "Auth": {
+    "title": "Secret Message",
     "signup": "Sign up",
     "signin": "Sign in",
     "logout": "Logout",

@@ -31,7 +31,7 @@ const UserProfile = () => {
   return (
     <div className="absolute right-0 top-0 z-100 p-3 w-full flex justify-between gap-2 items-center">
       <div className="ml-2 font-bold dark:text-white text-black">
-        <ScrambleText text="Secret Message" />
+        <ScrambleText text={t("title")} />
       </div>
       <div className="flex gap-2 items-center">
         <LanguageSwitcher />
