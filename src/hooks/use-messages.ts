@@ -18,7 +18,9 @@ export interface Message {
   updatedAt: string;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL_LOCAL || "http://localhost:8000";
+const API_BASE_URL: string | undefined = process.env.NODE_ENV === 'production'
+  ? process.env.NEXT_PUBLIC_API_URL_PROD
+  : process.env.NEXT_PUBLIC_API_URL
 
 export const useMessages = () => {
   const user = useStore((state) => state.user);
