@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Open_Sans, Geist_Mono } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/sonner";
 import { StoreProvider } from "@/store/provider";
@@ -10,8 +10,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import "../globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
   subsets: ["latin"],
 });
 
@@ -43,7 +43,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[url('/assets/images/background.png')] bg-no-repeat dark:bg-none transition-colors duration-300`}
+        className={`${openSans.variable} ${geistMono.variable} antialiased bg-[url('/assets/images/background.png')] bg-no-repeat dark:bg-none transition-colors duration-300`}
       >
         <NextTopLoader
           showSpinner={false}
