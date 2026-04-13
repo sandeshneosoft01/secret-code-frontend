@@ -22,6 +22,7 @@ import { ThemeToggle } from "./theme-toggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslations } from "next-intl";
 import ScrambleText from "./scramble-text";
+import Link from "next/link";
 
 const UserProfile = () => {
   const user = useStore((s) => s.user);
@@ -30,9 +31,9 @@ const UserProfile = () => {
 
   return (
     <div className="absolute right-0 top-0 z-100 p-3 w-full flex justify-between gap-2 items-center">
-      <div className="ml-2 font-bold dark:text-white text-black">
+      <Link href="/" className="ml-2 font-bold dark:text-white text-black">
         <ScrambleText text={t("title")} />
-      </div>
+      </Link>
       <div className="flex gap-2 items-center">
         <LanguageSwitcher />
         <ThemeToggle />
