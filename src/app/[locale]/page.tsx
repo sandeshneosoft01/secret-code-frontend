@@ -22,7 +22,6 @@ import AddUserModal from "@/components/home/AddUserModal";
 import { useMessages, useCreateMessage, useUpdateMessage, useDeleteMessage, useRestoreMessage, useBulkDeleteMessages, useBulkRestoreMessages, Message } from "@/hooks/use-messages";
 
 type StateTypes = {
-  isLoading: boolean;
   userCode: string;
   isVerifyCode: boolean;
   isNewMessage: boolean;
@@ -47,7 +46,6 @@ type StateTypes = {
 };
 
 const initialState: StateTypes = {
-  isLoading: true,
   userCode: "",
   isVerifyCode: false,
   isNewMessage: false,
@@ -360,15 +358,6 @@ const Home = () => {
   }, [state.emailSearchVal, state.emailLists]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setState((prevState) => ({
-        ...prevState,
-        isLoading: false,
-      }));
-    }, 2000);
-  }, []);
-
-  useEffect(() => {
     if (state.userCode.length === 6) {
       handleVerifyUserCode();
     }
@@ -385,7 +374,7 @@ const Home = () => {
         }`}
       dialogOverlayClass="backdrop-blur-xl bg-black/30"
     >
-      {state.isLoading && (
+      {!codeParam && isMessagesLoading && (
         <div className="space-y-4">
           <Skeleton className="h-20 w-full bg-muted rounded-sm" />
           <Skeleton className="h-3.5 w-[75%] rounded-sm bg-muted" />
@@ -409,7 +398,7 @@ const Home = () => {
         )
       )}
 
-      {!codeParam && !state.isLoading && (
+      {!codeParam && !isMessagesLoading && (
         <div className="flex flex-col w-full">
           {state.isNewMessage ? (
             <MessageForm
