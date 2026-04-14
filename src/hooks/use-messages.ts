@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { useStore } from "@/store";
 import { getMessageByCode } from "@/services/message-service";
 import { useTranslations } from "next-intl";
+import { api } from "@/services/api";
 
 export interface Message {
   id: string;
@@ -18,9 +19,6 @@ export interface Message {
   updatedAt: string;
 }
 
-const API_BASE_URL: string | undefined = process.env.NODE_ENV === 'production'
-  ? process.env.NEXT_PUBLIC_API_URL_PROD
-  : process.env.NEXT_PUBLIC_API_URL
 
 export const useMessages = () => {
   const user = useStore((state) => state.user);
@@ -30,17 +28,8 @@ export const useMessages = () => {
     queryFn: async () => {
       if (!user?.token) return [];
 
-      const response = await fetch(`${API_BASE_URL}/api/v1/messages`, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch messages");
-      }
-      const json = await response.json();
-      return json.data;
+      const response = await api.get("/api/v1/messages");
+      return response.data.data;
     },
     enabled: !!user?.token,
   });
@@ -62,23 +51,13 @@ export const useCreateMessage = () => {
 
   return useMutation({
     mutationFn: async (newMessage: CreateMessagePayload) => {
-      if (!user?.token) throw new Error("User not authenticated");
-
-      const response = await fetch(`${API_BASE_URL}/api/v1/messages`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify(newMessage),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.code || errorData.error || errorData.message || "INTERNAL_ERROR");
+      try {
+        const response = await api.post("/api/v1/messages", newMessage);
+        return response.data;
+      } catch (error: any) {
+        const errorData = error.response?.data;
+        throw new Error(errorData?.code || errorData?.error || errorData?.message || "INTERNAL_ERROR");
       }
-
-      return response.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
@@ -101,24 +80,14 @@ export const useUpdateMessage = () => {
 
   return useMutation({
     mutationFn: async (updatedMessage: UpdateMessagePayload) => {
-      if (!user?.token) throw new Error("User not authenticated");
-
       const { id, ...payload } = updatedMessage;
-      const response = await fetch(`${API_BASE_URL}/api/v1/messages/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.code || errorData.error || errorData.message || "INTERNAL_ERROR");
+      try {
+        const response = await api.patch(`/api/v1/messages/${id}`, payload);
+        return response.data;
+      } catch (error: any) {
+        const errorData = error.response?.data;
+        throw new Error(errorData?.code || errorData?.error || errorData?.message || "INTERNAL_ERROR");
       }
-
-      return response.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
@@ -143,21 +112,13 @@ export const useDeleteMessage = () => {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      if (!user?.token) throw new Error("User not authenticated");
-
-      const response = await fetch(`${API_BASE_URL}/api/v1/messages/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.code || errorData.error || errorData.message || "INTERNAL_ERROR");
+      try {
+        const response = await api.delete(`/api/v1/messages/${id}`);
+        return response.data;
+      } catch (error: any) {
+        const errorData = error.response?.data;
+        throw new Error(errorData?.code || errorData?.error || errorData?.message || "INTERNAL_ERROR");
       }
-
-      return response.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
@@ -176,21 +137,13 @@ export const useRestoreMessage = () => {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      if (!user?.token) throw new Error("User not authenticated");
-
-      const response = await fetch(`${API_BASE_URL}/api/v1/messages/${id}/restore`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.code || errorData.error || errorData.message || "INTERNAL_ERROR");
+      try {
+        const response = await api.patch(`/api/v1/messages/${id}/restore`);
+        return response.data;
+      } catch (error: any) {
+        const errorData = error.response?.data;
+        throw new Error(errorData?.code || errorData?.error || errorData?.message || "INTERNAL_ERROR");
       }
-
-      return response.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
@@ -209,23 +162,13 @@ export const useBulkDeleteMessages = () => {
 
   return useMutation({
     mutationFn: async (ids: string[]) => {
-      if (!user?.token) throw new Error("User not authenticated");
-
-      const response = await fetch(`${API_BASE_URL}/api/v1/messages/bulk-delete`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({ ids }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.code || errorData.message || "INTERNAL_ERROR");
+      try {
+        const response = await api.post("/api/v1/messages/bulk-delete", { ids });
+        return response.data;
+      } catch (error: any) {
+        const errorData = error.response?.data;
+        throw new Error(errorData?.code || errorData?.message || "INTERNAL_ERROR");
       }
-
-      return response.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
@@ -244,23 +187,13 @@ export const useBulkRestoreMessages = () => {
 
   return useMutation({
     mutationFn: async (ids: string[]) => {
-      if (!user?.token) throw new Error("User not authenticated");
-
-      const response = await fetch(`${API_BASE_URL}/api/v1/messages/bulk-restore`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({ ids }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.code || errorData.message || "INTERNAL_ERROR");
+      try {
+        const response = await api.post("/api/v1/messages/bulk-restore", { ids });
+        return response.data;
+      } catch (error: any) {
+        const errorData = error.response?.data;
+        throw new Error(errorData?.code || errorData?.message || "INTERNAL_ERROR");
       }
-
-      return response.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
