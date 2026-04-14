@@ -4,6 +4,7 @@ import { useStore } from "@/store";
 import { getMessageByCode } from "@/services/message-service";
 import { useTranslations } from "next-intl";
 import { api } from "@/services/api";
+import { MessageCode } from "@/constant/messages";
 
 export interface Message {
   id: string;
@@ -61,10 +62,10 @@ export const useCreateMessage = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success(t(data.code || "MESSAGE_CREATED" as any));
+      toast.success(t((data.code || "MESSAGE_CREATED") as MessageCode));
     },
     onError: (error: Error) => {
-      toast.error(t(error.message as any || "INTERNAL_ERROR"));
+      toast.error(t((error.message || "INTERNAL_ERROR") as MessageCode));
     },
   });
 };
@@ -91,10 +92,10 @@ export const useUpdateMessage = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success(t(data.code || "MESSAGE_UPDATED" as any));
+      toast.success(t((data.code || "MESSAGE_UPDATED") as MessageCode));
     },
     onError: (error: Error) => {
-      toast.error(t(error.message as any || "INTERNAL_ERROR"));
+      toast.error(t((error.message || "INTERNAL_ERROR") as MessageCode));
     },
   });
 };
@@ -122,10 +123,10 @@ export const useDeleteMessage = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success(t(data.code || "MESSAGE_DELETED" as any));
+      toast.success(t((data.code || "MESSAGE_DELETED") as MessageCode));
     },
     onError: (error: Error) => {
-      toast.error(t(error.message as any || "INTERNAL_ERROR"));
+      toast.error(t((error.message || "INTERNAL_ERROR") as MessageCode));
     },
   });
 };
@@ -147,10 +148,10 @@ export const useRestoreMessage = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success(t(data.code || "MESSAGE_RESTORED" as any));
+      toast.success(t((data.code || "MESSAGE_RESTORED") as MessageCode));
     },
     onError: (error: Error) => {
-      toast.error(t(error.message as any || "INTERNAL_ERROR"));
+      toast.error(t((error.message || "INTERNAL_ERROR") as MessageCode));
     },
   });
 };
@@ -172,10 +173,10 @@ export const useBulkDeleteMessages = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success(t(data.code || "MESSAGES_PROCESSED" as any));
+      toast.success(t((data.code || "MESSAGES_PROCESSED") as MessageCode));
     },
     onError: (error: Error) => {
-      toast.error(t(error.message as any || "INTERNAL_ERROR"));
+      toast.error(t((error.message || "INTERNAL_ERROR") as MessageCode));
     },
   });
 };
@@ -197,10 +198,10 @@ export const useBulkRestoreMessages = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
-      toast.success(t(data.code || "MESSAGES_RESTORED" as any));
+      toast.success(t((data.code || "MESSAGES_RESTORED") as MessageCode));
     },
     onError: (error: Error) => {
-      toast.error(t(error.message as any || "INTERNAL_ERROR"));
+      toast.error(t((error.message || "INTERNAL_ERROR") as MessageCode));
     },
   });
 };

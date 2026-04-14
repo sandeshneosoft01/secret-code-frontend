@@ -8,6 +8,7 @@ import { useGetMessageByCode } from "@/hooks/use-messages";
 import { useStore } from "@/store";
 import { useTranslations } from "next-intl";
 import { sanitizeHtml } from "@/lib/utils";
+import { MessageCode } from "@/constant/messages";
 
 const EnterCodePage = () => {
   const t = useTranslations();
@@ -33,7 +34,7 @@ const EnterCodePage = () => {
         onSuccess: (response) => {
           if (response.success) {
             setMessageContent(response.data.content);
-            toast.success(t(`Messages.${response.code || "MESSAGE_RETRIEVED"}` as any));
+            toast.success(t(`Messages.${(response.code || "MESSAGE_RETRIEVED") as MessageCode}`));
             if (response.data.sender !== user?.user?.id) {
               toast.info(t("HomePage.destroySoon"), {
                 position: "top-center",
@@ -42,8 +43,8 @@ const EnterCodePage = () => {
           }
         },
         onError: (error: any) => {
-          const code = error.response?.data?.code || "INTERNAL_ERROR";
-          toast.error(t(`Messages.${code}` as any));
+          const code = error.response?.data?.code || "SOMETHING_WENT_WRONG";
+          toast.error(t(`Messages.${code as MessageCode}`));
           setUserCode("");
         },
       });

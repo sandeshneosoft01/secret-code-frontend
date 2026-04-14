@@ -49,9 +49,9 @@ const MessageList: React.FC<MessageListProps> = ({
   );
   const [selectedIds, setSelectedIds] = React.useState<Set<string>>(new Set());
 
-  const filteredMessages = messages.filter(
-    (message) => message.status === activeStatus,
-  );
+  const filteredMessages = React.useMemo(() => {
+    return messages.filter((message) => message.status === activeStatus);
+  }, [messages, activeStatus]);
 
   const handleToggleSelect = (id: string) => {
     setSelectedIds((prev) => {
