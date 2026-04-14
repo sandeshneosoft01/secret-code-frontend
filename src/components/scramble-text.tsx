@@ -31,7 +31,7 @@ const ScrambleText: React.FC<ScrambleTextProps> = ({
     
     let iteration = 0;
     intervalRef.current = setInterval(() => {
-      setDisplayText((prev) =>
+      setDisplayText(() =>
         text
           .split("")
           .map((char, index) => {
@@ -55,10 +55,10 @@ const ScrambleText: React.FC<ScrambleTextProps> = ({
   useEffect(() => {
     // Phase 1: Flicker random characters during the initial delay
     const flickerInterval = setInterval(() => {
-      setDisplayText((prev) =>
+      setDisplayText(() =>
         text
           .split("")
-          .map((char, index) => {
+          .map((char) => {
             if (char === " ") return " ";
             return CHARS[Math.floor(Math.random() * CHARS.length)];
           })

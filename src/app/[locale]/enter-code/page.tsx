@@ -7,6 +7,7 @@ import VerifyCode from "@/components/home/VerifyCode";
 import { useGetMessageByCode } from "@/hooks/use-messages";
 import { useStore } from "@/store";
 import { useTranslations } from "next-intl";
+import { sanitizeHtml } from "@/lib/utils";
 
 const EnterCodePage = () => {
   const t = useTranslations();
@@ -85,7 +86,7 @@ const EnterCodePage = () => {
         {isVerified && (
           <div
             className="h-full overflow-auto pt-4 prose prose-slate max-w-none"
-            dangerouslySetInnerHTML={{ __html: messageContent }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(messageContent) }}
           />
         )}
       </DialogLayout>

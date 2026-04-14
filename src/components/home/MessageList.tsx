@@ -13,6 +13,7 @@ import {
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import { Message } from "@/hooks/use-messages";
 import { useTranslations } from "next-intl";
+import { sanitizeHtml } from "@/lib/utils";
 
 interface MessageListProps {
   messages: Message[];
@@ -214,54 +215,54 @@ const MessageList: React.FC<MessageListProps> = ({
             const messageId = (message.id || message._id as string);
             const isSelected = selectedIds.has(messageId);
             return (
-                <div
-                  key={messageId}
-                  className={`flex w-full gap-2 border rounded-md p-3 text-sm transition-all duration-200 ${isSelected ? "bg-primary/5 border-primary shadow-sm" : "hover:border-primary/30"}`}
-                >
-                  <div className="flex items-start pt-1">
-                    <Checkbox
-                      checked={isSelected}
-                      onCheckedChange={() => handleToggleSelect(messageId)}
+              <div
+                key={messageId}
+                className={`flex w-full gap-2 border rounded-md p-3 text-sm transition-all duration-200 ${isSelected ? "bg-primary/5 border-primary shadow-sm" : "hover:border-primary/30"}`}
+              >
+                <div className="flex items-start pt-1">
+                  <Checkbox
+                    checked={isSelected}
+                    onCheckedChange={() => handleToggleSelect(messageId)}
+                  />
+                </div>
+                <div className="pt-0.5 text-muted-foreground font-medium">{index + 1}.</div>
+                <div className="w-full">
+                  <div>
+                    <span className="font-semibold text-foreground">{t("MessageList.message")}</span>
+                    <div
+                      className="mt-1 w-full line-clamp-2 text-muted-foreground leading-relaxed transition-colors duration-200"
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHtml(message.content),
+                      }}
                     />
                   </div>
-                  <div className="pt-0.5 text-muted-foreground font-medium">{index + 1}.</div>
-                  <div className="w-full">
-                    <div>
-                      <span className="font-semibold text-foreground">{t("MessageList.message")}</span>
-                      <div
-                        className="mt-1 w-full line-clamp-2 text-muted-foreground leading-relaxed transition-colors duration-200"
-                        dangerouslySetInnerHTML={{
-                          __html: message.content,
-                        }}
-                      />
-                    </div>
-                    <div className="mt-4 flex items-end justify-between w-full">
-                      <div className="flex items-center space-x-4 text-xs">
-                        <div className="flex flex-col gap-1">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("MessageList.people")}</span>
-                          <Badge variant="outline" className="h-7 px-2 font-medium bg-muted/50 transition-colors">
-                            <Users size={12} className="mr-1 text-muted-foreground" />
-                            {message.emailLists.length}
-                          </Badge>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("MessageList.code")}</span>
-                          <Badge
-                            variant="outline"
-                            className="h-7 px-2 font-mono cursor-pointer hover:bg-accent transition-colors bg-muted/50"
-                            onClick={() => handleCopyCode(message.code)}
-                          >
-                            {message.code}
-                          </Badge>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("MessageList.views")}</span>
-                          <Badge variant="outline" className="h-7 px-2 font-medium bg-muted/50 transition-colors">
-                            <ViewIcon size={12} className="mr-1 text-muted-foreground" />
-                            {message.viewCount}
-                          </Badge>
-                        </div>
+                  <div className="mt-4 flex items-end justify-between w-full">
+                    <div className="flex items-center space-x-4 text-xs">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("MessageList.people")}</span>
+                        <Badge variant="outline" className="h-7 px-2 font-medium bg-muted/50 transition-colors">
+                          <Users size={12} className="mr-1 text-muted-foreground" />
+                          {message.emailLists.length}
+                        </Badge>
                       </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("MessageList.code")}</span>
+                        <Badge
+                          variant="outline"
+                          className="h-7 px-2 font-mono cursor-pointer hover:bg-accent transition-colors bg-muted/50"
+                          onClick={() => handleCopyCode(message.code)}
+                        >
+                          {message.code}
+                        </Badge>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("MessageList.views")}</span>
+                        <Badge variant="outline" className="h-7 px-2 font-medium bg-muted/50 transition-colors">
+                          <ViewIcon size={12} className="mr-1 text-muted-foreground" />
+                          {message.viewCount}
+                        </Badge>
+                      </div>
+                    </div>
                     <div className="flex items-center space-x-2">
                       <TooltipProvider>
                         <Tooltip>

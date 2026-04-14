@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { generateSecretCode, isValidEmailFn } from "@/lib/utils";
 import { editorContent } from "@/constant";
 import { useStore } from "@/store";
+import { sanitizeHtml } from "@/lib/utils";
 
 import VerifyCode from "@/components/home/VerifyCode";
 import MessageList from "@/components/home/MessageList";
@@ -403,7 +404,7 @@ const Home = () => {
         state.isVerifyCode && (
           <div
             className="h-full overflow-auto"
-            dangerouslySetInnerHTML={{ __html: editorContent }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(editorContent) }}
           />
         )
       )}
