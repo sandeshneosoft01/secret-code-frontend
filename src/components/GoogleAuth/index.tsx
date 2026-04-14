@@ -50,7 +50,7 @@ const GoogleAuth = (props: PropTypes) => {
     try {
       const result = await signInWithPopup(googleAuthConfig, googleProvider)
       const idToken = await result.user.getIdToken(true)
-      await mutation.mutate(idToken)
+      await mutation.mutateAsync(idToken)
     } catch (error: any) {
       toast.error(error?.data?.message || t('googleAuthError'))
     }

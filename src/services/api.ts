@@ -70,8 +70,9 @@ api.interceptors.response.use(
         }
         if (error.response?.status === 401) {
             console.warn('Unauthorized - Token expired?')
-            // Optionally dispatch logout
-            // store.dispatch(clearToken());
+            useStore.getState().logout();
+            // next-intl-aware redirect; or use window.location for simplicity:
+            window.location.href = '/login';
         }
 
         return Promise.reject(error)

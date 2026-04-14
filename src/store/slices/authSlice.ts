@@ -1,8 +1,16 @@
 import { StateCreator } from 'zustand'
 import { decodeJwt } from 'jose'
 
+
+export interface UserProfile {
+  _id: string;
+  fullName: string;
+  email: string;
+  photoURL?: string;
+}
+
 export interface AuthSlice {
-  user: null | { user: any, token: string | null }
+  user: null | { user: UserProfile, token: string | null }
   setUser: (user: AuthSlice['user']) => void
   logout: () => void
   checkAuth: () => void

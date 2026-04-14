@@ -11,8 +11,7 @@ export const getProfileDetails = async () => {
             setTimeout(() => {
                 useStore.getState().logout()
                 localStorage.clear()
-                const currentPath = location.href
-                window.location.href = `/sign-in?redirect=${currentPath}`
+                window.location.href = '/sign-in'
             }, 1200)
         }
         throw error
