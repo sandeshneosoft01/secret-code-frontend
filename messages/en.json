@@ -158,6 +158,7 @@
     "MESSAGE_EXPIRED": "This message has expired and is no longer available.",
     "CODE_REQUIRED": "Secret code is required to access this message.",
     "ACCESS_DENIED": "You do not have permission to view this message.",
-    "INTERNAL_ERROR": "An unexpected error occurred. Please try again later."
+    "INTERNAL_ERROR": "An unexpected error occurred. Please try again later.",
+    "SOMETHING_WENT_WRONG": "Something went wrong."
   }
 }

@@ -5,6 +5,7 @@ import { signInUser, signUpUser } from '@/services/user-service'
 import { useStore } from '@/store'
 import type { SignInUserPayload, SignUpUserPayload } from '@/types'
 import { useTranslations } from 'next-intl'
+import { MessageCode } from '@/constant/messages'
 
 export const useSignin = () => {
   const t = useTranslations('Messages')
@@ -22,8 +23,8 @@ export const useSignin = () => {
       router.push('/')
     },
     onError: (error: any) => {
-      const code = error.response?.data?.code || error.response?.data?.error || error.response?.data?.message || 'INTERNAL_ERROR'
-      toast.error(t(code as any))
+      const code = error.response?.data?.code || error.response?.data?.error || error.response?.data?.message || 'SOMETHING_WENT_WRONG'
+      toast.error(t(code as MessageCode))
     },
   })
 }
@@ -44,8 +45,8 @@ export const useSignup = () => {
       router.push('/')
     },
     onError: (error: any) => {
-      const code = error.response?.data?.code || error.response?.data?.error || error.response?.data?.message || 'INTERNAL_ERROR'
-      toast.error(t(code as any))
+      const code = error.response?.data?.code || error.response?.data?.error || error.response?.data?.message || 'SOMETHING_WENT_WRONG'
+      toast.error(t(code as MessageCode))
     },
   })
 }
