@@ -23,10 +23,11 @@ type PropTypes = {
 const GoogleAuth = (props: PropTypes) => {
   const { title, loginType } = props
   const navigate = useRouter()
-  const isMutating = useIsMutating()
+  const isMutating = useIsMutating({ mutationKey: [loginType] })
   const t = useTranslations('Auth')
 
   const mutation = useMutation({
+    mutationKey: [loginType],
     mutationFn: loginType === 'signin' ? signInWithGoogle : signUpWithGoogle,
     onSuccess: (data) => handleSuccess(data),
     onError: () => { },

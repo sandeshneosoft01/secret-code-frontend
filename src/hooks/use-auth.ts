@@ -6,6 +6,7 @@ import { useStore } from '@/store'
 import type { SignInUserPayload, SignUpUserPayload } from '@/types'
 import { useTranslations } from 'next-intl'
 import { MessageCode } from '@/constant/messages'
+import { getErrorMessage } from '@/lib/error-handler'
 
 export const useSignin = () => {
   const t = useTranslations('Messages')
@@ -13,6 +14,7 @@ export const useSignin = () => {
   const setUser = useStore((state) => state.setUser)
 
   return useMutation({
+    mutationKey: ['signin'],
     mutationFn: (data: SignInUserPayload) => signInUser(data),
     onSuccess: (response) => {
       setUser({
@@ -23,7 +25,7 @@ export const useSignin = () => {
       router.push('/')
     },
     onError: (error: any) => {
-      const code = error.response?.data?.code || error.response?.data?.error || error.response?.data?.message || 'SOMETHING_WENT_WRONG'
+      const code = getErrorMessage(error, 'SOMETHING_WENT_WRONG')
       toast.error(t(code as MessageCode))
     },
   })
@@ -35,6 +37,7 @@ export const useSignup = () => {
   const setUser = useStore((state) => state.setUser)
 
   return useMutation({
+    mutationKey: ['signup'],
     mutationFn: (data: SignUpUserPayload) => signUpUser(data),
     onSuccess: (response) => {
       setUser({
@@ -45,7 +48,7 @@ export const useSignup = () => {
       router.push('/')
     },
     onError: (error: any) => {
-      const code = error.response?.data?.code || error.response?.data?.error || error.response?.data?.message || 'SOMETHING_WENT_WRONG'
+      const code = getErrorMessage(error, 'SOMETHING_WENT_WRONG')
       toast.error(t(code as MessageCode))
     },
   })

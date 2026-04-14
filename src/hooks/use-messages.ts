@@ -5,9 +5,9 @@ import { getMessageByCode } from "@/services/message-service";
 import { useTranslations } from "next-intl";
 import { api } from "@/services/api";
 import { MessageCode } from "@/constant/messages";
+import { getErrorMessage } from "@/lib/error-handler";
 
 export interface Message {
-  id: string;
   _id?: string;
   emailLists: string[];
   content: string;
@@ -56,8 +56,7 @@ export const useCreateMessage = () => {
         const response = await api.post("/api/v1/messages", newMessage);
         return response.data;
       } catch (error: any) {
-        const errorData = error.response?.data;
-        throw new Error(errorData?.code || errorData?.error || errorData?.message || "INTERNAL_ERROR");
+        throw new Error(getErrorMessage(error));
       }
     },
     onSuccess: (data) => {
@@ -71,7 +70,7 @@ export const useCreateMessage = () => {
 };
 
 export interface UpdateMessagePayload extends Partial<CreateMessagePayload> {
-  id: string;
+  _id: string;
 }
 
 export const useUpdateMessage = () => {
@@ -81,13 +80,12 @@ export const useUpdateMessage = () => {
 
   return useMutation({
     mutationFn: async (updatedMessage: UpdateMessagePayload) => {
-      const { id, ...payload } = updatedMessage;
+      const { _id, ...payload } = updatedMessage;
       try {
-        const response = await api.patch(`/api/v1/messages/${id}`, payload);
+        const response = await api.patch(`/api/v1/messages/${_id}`, payload);
         return response.data;
       } catch (error: any) {
-        const errorData = error.response?.data;
-        throw new Error(errorData?.code || errorData?.error || errorData?.message || "INTERNAL_ERROR");
+        throw new Error(getErrorMessage(error));
       }
     },
     onSuccess: (data) => {
@@ -112,13 +110,12 @@ export const useDeleteMessage = () => {
   const user = useStore((state) => state.user);
 
   return useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (_id: string) => {
       try {
-        const response = await api.delete(`/api/v1/messages/${id}`);
+        const response = await api.delete(`/api/v1/messages/${_id}`);
         return response.data;
       } catch (error: any) {
-        const errorData = error.response?.data;
-        throw new Error(errorData?.code || errorData?.error || errorData?.message || "INTERNAL_ERROR");
+        throw new Error(getErrorMessage(error));
       }
     },
     onSuccess: (data) => {
@@ -137,13 +134,12 @@ export const useRestoreMessage = () => {
   const user = useStore((state) => state.user);
 
   return useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (_id: string) => {
       try {
-        const response = await api.patch(`/api/v1/messages/${id}/restore`);
+        const response = await api.patch(`/api/v1/messages/${_id}/restore`);
         return response.data;
       } catch (error: any) {
-        const errorData = error.response?.data;
-        throw new Error(errorData?.code || errorData?.error || errorData?.message || "INTERNAL_ERROR");
+        throw new Error(getErrorMessage(error));
       }
     },
     onSuccess: (data) => {
@@ -167,8 +163,7 @@ export const useBulkDeleteMessages = () => {
         const response = await api.post("/api/v1/messages/bulk-delete", { ids });
         return response.data;
       } catch (error: any) {
-        const errorData = error.response?.data;
-        throw new Error(errorData?.code || errorData?.message || "INTERNAL_ERROR");
+        throw new Error(getErrorMessage(error));
       }
     },
     onSuccess: (data) => {
@@ -192,8 +187,7 @@ export const useBulkRestoreMessages = () => {
         const response = await api.post("/api/v1/messages/bulk-restore", { ids });
         return response.data;
       } catch (error: any) {
-        const errorData = error.response?.data;
-        throw new Error(errorData?.code || errorData?.message || "INTERNAL_ERROR");
+        throw new Error(getErrorMessage(error));
       }
     },
     onSuccess: (data) => {

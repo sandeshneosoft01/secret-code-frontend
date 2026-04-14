@@ -8,7 +8,7 @@ import Providers from "@/components/Providers";
 import AuthGuard from "@/components/AuthGuard";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
-import "../globals.css";
+import "./globals.css";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",

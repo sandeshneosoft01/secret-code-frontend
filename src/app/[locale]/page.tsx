@@ -235,7 +235,7 @@ const Home = () => {
     if (state.editingMessage) {
       updateMessage.mutate(
         {
-          id: state.editingMessage.id || state.editingMessage._id as string,
+          _id: state.editingMessage._id as string,
           content: state.content,
           emailLists: state.emailLists,
           code: state.code,
@@ -295,16 +295,16 @@ const Home = () => {
     }));
   };
 
-  const handleDeleteMessage = (id: string, onSuccess?: () => void) => {
-    deleteMessage.mutate(id, {
+  const handleDeleteMessage = (_id: string, onSuccess?: () => void) => {
+    deleteMessage.mutate(_id, {
       onSuccess: () => {
         onSuccess?.();
       },
     });
   };
 
-  const handleRestoreMessage = (id: string) => {
-    restoreMessage.mutate(id);
+  const handleRestoreMessage = (_id: string) => {
+    restoreMessage.mutate(_id);
   };
 
   const handleBulkDeleteMessages = (ids: string[], onSuccess?: () => void) => {

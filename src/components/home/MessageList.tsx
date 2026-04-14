@@ -69,7 +69,7 @@ const MessageList: React.FC<MessageListProps> = ({
     if (selectedCount === filteredMessages.length && filteredMessages.length > 0) {
       setSelectedIds(new Set());
     } else {
-      setSelectedIds(new Set(filteredMessages.map((m) => (m.id || m._id as string))));
+      setSelectedIds(new Set(filteredMessages.map((m) => (m._id as string))));
     }
   };
 
@@ -113,7 +113,7 @@ const MessageList: React.FC<MessageListProps> = ({
   };
 
   const selectedCount = React.useMemo(() => {
-    const visibleIds = new Set(filteredMessages.map((m) => m.id || (m._id as string)));
+    const visibleIds = new Set(filteredMessages.map((m) => m._id as string));
     return Array.from(selectedIds).filter((id) => visibleIds.has(id)).length;
   }, [selectedIds, filteredMessages]);
 
@@ -212,7 +212,7 @@ const MessageList: React.FC<MessageListProps> = ({
           </div>
         ) : (
           filteredMessages.map((message, index) => {
-            const messageId = (message.id || message._id as string);
+            const messageId = message._id as string;
             const isSelected = selectedIds.has(messageId);
             return (
               <div

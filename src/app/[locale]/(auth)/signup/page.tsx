@@ -18,7 +18,7 @@ import PasswordStrength from '@/components/PasswordStrength'
 const Signup = () => {
   const t = useTranslations('Auth')
   const { mutate: signup, isPending } = useSignup()
-  const isMutating = useIsMutating()
+  const isMutating = useIsMutating({ mutationKey: ['signup'] })
   const form = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
     mode: 'all',
