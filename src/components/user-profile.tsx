@@ -3,6 +3,7 @@ import { useStore } from "@/store";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const getInitialName = (name: string) => {
+  if (!name) return ''
   return name
     .split(' ')
     .map(word => word[0].toUpperCase())

@@ -86,7 +86,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
           <div className="flex items-center gap-2 flex-wrap">
             {filteredEmails.map((item, index) => (
               <Badge
-                key={index}
+                key={`user-email-${index}`}
                 className="font-medium text-sm h-7 cursor-pointer gap-1 px-2"
                 onClick={() => onRemoveEmail(item)}
               >

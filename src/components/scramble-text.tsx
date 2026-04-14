@@ -6,7 +6,6 @@ const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+{
 
 interface ScrambleTextProps {
   text: string;
-  speed?: number;
   scrambleSpeed?: number;
   delay?: number;
   className?: string;
@@ -20,7 +19,7 @@ const ScrambleText: React.FC<ScrambleTextProps> = ({
   className,
   triggerOnHover = true,
 }) => {
-  const [displayText, setDisplayText] = useState(() => 
+  const [displayText, setDisplayText] = useState(() =>
     text.split("").map(char => char === " " ? " " : CHARS[Math.floor(Math.random() * CHARS.length)]).join("")
   );
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -28,7 +27,7 @@ const ScrambleText: React.FC<ScrambleTextProps> = ({
 
   const startScramble = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
-    
+
     let iteration = 0;
     intervalRef.current = setInterval(() => {
       setDisplayText(() =>
@@ -85,8 +84,8 @@ const ScrambleText: React.FC<ScrambleTextProps> = ({
   };
 
   return (
-    <span 
-      className={className} 
+    <span
+      className={className}
       onMouseEnter={handleMouseEnter}
       style={{ display: "inline-block", fontFamily: "monospace" }}
     >
