@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { Open_Sans, Geist_Mono } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import Image from "next/image";
+import background from "@/assets/images/background.png";
 import { Toaster } from "@/components/ui/sonner";
 import { StoreProvider } from "@/store/provider";
 import UserProfile from "@/components/user-profile";
@@ -118,11 +119,14 @@ export default async function LocaleLayout({
       >
         <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none dark:hidden">
           <Image
-            src="/assets/images/background.png"
+            src={background}
             alt="Background"
             fill
-            className="object-cover"
-            priority={false}
+            className="object-cover blur-[2px] scale-105"
+            priority
+            sizes="100vw"
+            quality={90}
+            placeholder="blur"
           />
         </div>
         <NextTopLoader
