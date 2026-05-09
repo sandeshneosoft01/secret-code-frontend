@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Open_Sans, Geist_Mono } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
+import Image from "next/image";
 import { Toaster } from "@/components/ui/sonner";
 import { StoreProvider } from "@/store/provider";
 import UserProfile from "@/components/user-profile";
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://secret-code-v1.vercel.app"), // Replace with actual URL if different
+  metadataBase: new URL("https://secret-code-v1.vercel.app"),
   alternates: {
     canonical: "/",
     languages: {
@@ -78,9 +79,20 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/icon.png",
-    shortcut: "/icon.png",
-    apple: "/icon.png",
+    icon: [
+      {
+        url: "/icon-light.svg",
+        type: "image/svg+xml",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/icon-dark.svg",
+        type: "image/svg+xml",
+        media: "(prefers-color-scheme: dark)",
+      },
+    ],
+    shortcut: "/icon-light.svg",
+    apple: "/icon-light.svg",
   },
 };
 
@@ -102,8 +114,17 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${openSans.variable} ${geistMono.variable} antialiased bg-[url('/assets/images/background.png')] bg-no-repeat dark:bg-none transition-colors duration-300`}
+        className={`${openSans.variable} ${geistMono.variable} antialiased dark:bg-none transition-colors duration-300`}
       >
+        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none dark:hidden">
+          <Image
+            src="/assets/images/background.png"
+            alt="Background"
+            fill
+            className="object-cover"
+            priority={false}
+          />
+        </div>
         <NextTopLoader
           showSpinner={false}
           easing="ease"
