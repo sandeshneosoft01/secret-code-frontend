@@ -21,8 +21,67 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Secret Message - Secure & Self-Destructing Messages",
-  description: "Safely share sensitive information with encrypted, self-destructing messages.",
+  title: {
+    default: "Secret Message - Secure & Self-Destructing Messages",
+    template: "%s | Secret Message",
+  },
+  description: "Safely share sensitive information with encrypted, self-destructing messages. End-to-end encrypted, secure, and privacy-focused.",
+  keywords: ["secret message", "encrypted chat", "self-destructing messages", "secure sharing", "privacy", "ephemeral messaging"],
+  authors: [{ name: "Secret Message Team" }],
+  creator: "Secret Message Team",
+  publisher: "Secret Message Team",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL("https://secret-code-v1.vercel.app"), // Replace with actual URL if different
+  alternates: {
+    canonical: "/",
+    languages: {
+      "en-US": "/en",
+      "hi-IN": "/hi",
+    },
+  },
+  openGraph: {
+    title: "Secret Message - Secure & Self-Destructing Messages",
+    description: "Safely share sensitive information with encrypted, self-destructing messages.",
+    url: "https://secret-code-v1.vercel.app",
+    siteName: "Secret Message",
+    images: [
+      {
+        url: "/icon.png",
+        width: 512,
+        height: 512,
+        alt: "Secret Message Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Secret Message - Secure & Self-Destructing Messages",
+    description: "Safely share sensitive information with encrypted, self-destructing messages.",
+    images: ["/icon.png"],
+    creator: "@secretmessage",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export function generateStaticParams() {
